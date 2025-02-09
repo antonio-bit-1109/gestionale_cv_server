@@ -35,7 +35,6 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginDTO loginDTO) {
         try {
-
             String token = this.userService.doLogin(loginDTO);
             return new ResponseEntity<>(new TokenResponse(token, "token generato con successo."), HttpStatus.OK);
         } catch (RuntimeException ex) {
