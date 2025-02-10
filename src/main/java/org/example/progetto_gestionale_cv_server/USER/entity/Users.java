@@ -24,15 +24,34 @@ public class Users {
     @Column(nullable = false, length = 15)
     private String telefono;
 
-    @Column(nullable = true)
-    private String profileImage;
-
     @Column(nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CVs> listaCv;
 
+    @Column(nullable = false)
+    private String role;
+
+    @Column(nullable = false)
+    private boolean consensoTrattamentoDati;
+
+
+    public void setConsensoTrattamentoDati(boolean consensoTrattamentoDati) {
+        this.consensoTrattamentoDati = consensoTrattamentoDati;
+    }
+
+    public boolean getConsensoTrattamentoDati() {
+        return this.consensoTrattamentoDati;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
 
     public void setPassword(String password) {
         this.password = password;
@@ -48,14 +67,6 @@ public class Users {
 
     public void setListaCv(List<CVs> listaCv) {
         this.listaCv = listaCv;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
     }
 
     public Long getId() {

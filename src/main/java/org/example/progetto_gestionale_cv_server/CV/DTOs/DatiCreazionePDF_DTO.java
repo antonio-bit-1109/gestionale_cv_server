@@ -20,6 +20,27 @@ public class DatiCreazionePDF_DTO {
     private String istruzione;
     @NotNull(message = "esperienze precedenti obbligatorie.")
     private String esperienzePrecedenti;
+    @NotNull(message = "inserire almeno una lingua conosciuta")
+    private String lingueConosciute;
+
+    private String descrizioneGenerale;
+
+
+    public void setLingueConosciute(String lingueConosciute) {
+        this.lingueConosciute = lingueConosciute;
+    }
+
+    public void setDescrizioneGenerale(String descrizioneGenerale) {
+        descrizioneGenerale = descrizioneGenerale;
+    }
+
+    public String getLingueConosciute() {
+        return lingueConosciute;
+    }
+
+    public String getDescrizioneGenerale() {
+        return descrizioneGenerale;
+    }
 
     public String getCompetenze() {
         return competenze;

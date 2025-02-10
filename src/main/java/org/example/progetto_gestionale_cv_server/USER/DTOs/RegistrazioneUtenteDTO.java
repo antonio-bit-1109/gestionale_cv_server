@@ -21,6 +21,17 @@ public class RegistrazioneUtenteDTO {
     @NotBlank(message = "password obbligatoria")
     private String password;
 
+    @NotNull(message = "il valore non può essere false")
+    private boolean consensoTrattamentoDati;
+
+    public void setConsensoTrattamentoDati(boolean consensoTrattamentoDati) {
+        this.consensoTrattamentoDati = consensoTrattamentoDati;
+    }
+
+    public boolean getConsensoTrattamentoDati() {
+        return consensoTrattamentoDati;
+    }
+
     public String getPassword() {
         return password;
     }

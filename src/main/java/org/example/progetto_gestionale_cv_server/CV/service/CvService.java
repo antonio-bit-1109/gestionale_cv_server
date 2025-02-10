@@ -30,7 +30,7 @@ public class CvService implements ICvService {
 
     //metodo di creazione del pdf
     @Override
-    public void creaPDF(DatiCreazionePDF_DTO datiCreazionePDFDto) throws RuntimeException, IOException {
+    public void creaPDF_Record_CV(DatiCreazionePDF_DTO datiCreazionePDFDto) throws RuntimeException, IOException {
 
         CVs cv = this.mapperCv.FromDTOToEntity(datiCreazionePDFDto);
         Optional<Users> utenteOpt = this.userRepository.findById(datiCreazionePDFDto.getIdUtente());

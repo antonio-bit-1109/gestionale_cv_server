@@ -27,11 +27,17 @@ public class CvController {
     @PostMapping("/create")
     public ResponseEntity<String> GeneraPdF(@Valid @RequestBody DatiCreazionePDF_DTO datiCreazionePDFDto) {
         try {
-            this.cvService.creaPDF(datiCreazionePDFDto);
+            this.cvService.creaPDF_Record_CV(datiCreazionePDFDto);
             return new ResponseEntity<>("Curriculum creato con successo. ", HttpStatus.OK);
 
         } catch (RuntimeException | IOException ex) {
             return new ResponseEntity<>("Errore durante la creazione del curriculum: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("edit")
+    public ResponseEntity<String> modificaPDF() {
+        return null
+                ;
     }
 }

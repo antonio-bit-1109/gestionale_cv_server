@@ -23,6 +23,8 @@ public class MapperUser {
         user.setEmail(dtoregistrazione.getEmail());
         user.setPassword(this.passwordEncoder.encode(dtoregistrazione.getPassword()));
         user.setTelefono(dtoregistrazione.getTelefono());
+        user.setConsensoTrattamentoDati(dtoregistrazione.getConsensoTrattamentoDati());
+        user.setRole("USER");
         return user;
     }
 

@@ -21,6 +21,8 @@ public class MapperCv {
         cvEntity.setCompetenze(datiPdf.getCompetenze());
         cvEntity.setIstruzione(datiPdf.getIstruzione());
         cvEntity.setEsperienze_Precedenti(datiPdf.getEsperienzePrecedenti());
+        cvEntity.setLingueConosciute(datiPdf.getLingueConosciute());
+        cvEntity.setDescrizioneGenerale(datiPdf.getDescrizioneGenerale());
         cvEntity.setCreated_at(oraCorrente);
         return cvEntity;
     }

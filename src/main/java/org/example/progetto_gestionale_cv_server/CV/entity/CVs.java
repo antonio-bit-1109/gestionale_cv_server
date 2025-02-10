@@ -11,28 +11,62 @@ public class CVs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Timestamp created_at;
-
     @Column(nullable = false)
     private String titolo;
-
     @Column(nullable = true)
     private Timestamp updated_at;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String esperienze_Precedenti;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String competenze;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String istruzione;
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
+    @Column(nullable = true)
+    private String nome_file_pdf;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String lingueConosciute;
+    @Column(nullable = true)
+    private String profileImage;
+    @Column(nullable = true)
+    private String DescrizioneGenerale;
+
+
+    public void setDescrizioneGenerale(String descrizioneGenerale) {
+        DescrizioneGenerale = descrizioneGenerale;
+    }
+
+    public String getDescrizioneGenerale() {
+        return DescrizioneGenerale;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setNome_file_pdf(String nome_file_pdf) {
+        this.nome_file_pdf = nome_file_pdf;
+    }
+
+    public String getNome_file_pdf() {
+        return nome_file_pdf;
+    }
+
+    public void setLingueConosciute(String lingueConosciute) {
+        this.lingueConosciute = lingueConosciute;
+    }
+
+    public String getLingueConosciute() {
+        return lingueConosciute;
+    }
 
     public void setTitolo(String titolo) {
         this.titolo = titolo;
