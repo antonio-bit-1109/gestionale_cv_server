@@ -10,10 +10,6 @@ public class DatiCreazionePDF_DTO {
     private Long idUtente;
     @NotNull(message = "titolo obbligatorio.")
     private String titolo;
-    @NotNull(message = "nome candidato obbligatorio.")
-    private String nomeCandidato;
-    @NotNull(message = "cognome candidato obbligatorio.")
-    private String cognomeCandidato;
     @NotNull(message = "competenze obbligatorie.")
     private String competenze;
     @NotNull(message = "istruzione obbligatoria.")
@@ -64,22 +60,6 @@ public class DatiCreazionePDF_DTO {
 
     public void setTitolo(String titolo) {
         this.titolo = titolo;
-    }
-
-    public String getNomeCandidato() {
-        return nomeCandidato;
-    }
-
-    public void setNomeCandidato(String nomeCandidato) {
-        this.nomeCandidato = nomeCandidato;
-    }
-
-    public String getCognomeCandidato() {
-        return cognomeCandidato;
-    }
-
-    public void setCognomeCandidato(String cognomeCandidato) {
-        this.cognomeCandidato = cognomeCandidato;
     }
 
     public String getIstruzione() {

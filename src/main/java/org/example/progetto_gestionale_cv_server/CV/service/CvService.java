@@ -1,7 +1,6 @@
 package org.example.progetto_gestionale_cv_server.CV.service;
 
 import org.example.progetto_gestionale_cv_server.CV.DTOs.DatiCreazionePDF_DTO;
-import org.example.progetto_gestionale_cv_server.CV.DTOs.ModificaDatiPDF_DTO;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -10,6 +9,7 @@ import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperCv;
 import org.example.progetto_gestionale_cv_server.utility.generazionePDF.GenerazionePDF;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -34,35 +34,39 @@ public class CvService implements ICvService {
     public void creaPDF_Record_CV(DatiCreazionePDF_DTO datiCreazionePDFDto) throws RuntimeException, IOException {
 
         CVs cv = this.mapperCv.FromDTOToEntity(datiCreazionePDFDto);
-        Optional<Users> utenteOpt = this.userRepository.findById(datiCreazionePDFDto.getIdUtente());
+        Users utente = returnUserIfExist(datiCreazionePDFDto);
 
-        if (utenteOpt.isEmpty()) {
-            throw new RuntimeException("L'utente non esiste.");
-        }
 
-        Users utente = utenteOpt.get();
         cv.setUser(utente); // Set the user before saving the CV
         CVs cvSaved = this.cvRepository.save(cv);
         utente.getListaCv().add(cvSaved); // Add the CV to the user's list of CVs
         this.userRepository.save(utente);
 
-        this.generazionePDF.CreazionePDFFileSystem(utente, cvSaved);
-        cvSaved.setNome_file_pdf(this.generazionePDF.getPath(utente, cv));
+        this.generazionePDF.CreazionePDFFileSystem(utente, cvSaved, false);
+//        cvSaved.setNome_file_pdf(this.generazionePDF.getPath(utente, cv));
         this.cvRepository.save(cv);
     }
 
 
     // metodo che dovrà modificare i campi cv della tabella e sostituire il pdf con i dati aggiornati.
     @Override
-    public void modificaPDF_Record_CV(ModificaDatiPDF_DTO datiModificaPDF) throws IOException {
+    public void modificaPDF_Record_CV(DatiCreazionePDF_DTO datiModificaPDF) throws IOException {
 
+        Users user = returnUserIfExist(datiModificaPDF);
+        this.mapperCv.ModificaCv(datiModificaPDF, user);
+
+    }
+
+    //privato
+    // ritornare lo user, se esiste, come una entity
+    private Users returnUserIfExist(DatiCreazionePDF_DTO datiModificaPDF) throws RuntimeException {
         Optional<Users> utenteOpt = this.userRepository.findById(datiModificaPDF.getIdUtente());
 
         if (utenteOpt.isEmpty()) {
             throw new RuntimeException("L'utente non esiste.");
         }
 
+        return utenteOpt.get();
     }
-
 
 }
