@@ -4,6 +4,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
 import jakarta.persistence.criteria.Root;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -15,6 +16,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -25,10 +27,12 @@ import java.util.UUID;
 public class GenerazionePDF {
 
     // stabilisci il percorso nel quale salvare il pdf creato
-    private String getPath(Users utente, CVs cv) {
+    public String getPath(Users utente, CVs cv) {
 
         String RootPath = Paths.get("").toAbsolutePath().toString();
-        return RootPath + "/src/main/resources/static/" + utente.getNome() + "_" + utente.getCognome() + "_" + UUID.randomUUID() + ".pdf";
+//        return RootPath + "/src/main/resources/static/" ;
+        String nameFilePDF = utente.getNome() + "_" + utente.getCognome() + "_" + UUID.randomUUID() + ".pdf";
+        return RootPath + "/src/main/resources/static/" + nameFilePDF;
     }
 
     public void CreazionePDFFileSystem(Users utente, CVs cv) throws IOException {
@@ -44,6 +48,7 @@ public class GenerazionePDF {
                     .setFontSize(18);
             document.add(title);
 
+//            document.add(new Paragraph("Nome: ").setBold()).add(new Paragraph(new Text(utente.getNome())));
             // Left-aligned CV data
             document.add(new Paragraph("Nome: " + utente.getNome()));
             document.add(new Paragraph("Cognome: " + utente.getCognome()));

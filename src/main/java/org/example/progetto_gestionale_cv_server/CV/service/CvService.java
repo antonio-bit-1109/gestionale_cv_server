@@ -1,6 +1,7 @@
 package org.example.progetto_gestionale_cv_server.CV.service;
 
 import org.example.progetto_gestionale_cv_server.CV.DTOs.DatiCreazionePDF_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.ModificaDatiPDF_DTO;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -28,7 +29,7 @@ public class CvService implements ICvService {
         this.generazionePDF = generazionePDF;
     }
 
-    //metodo di creazione del pdf
+    //metodo di creazione del pdf e popolamento tabella cv
     @Override
     public void creaPDF_Record_CV(DatiCreazionePDF_DTO datiCreazionePDFDto) throws RuntimeException, IOException {
 
@@ -46,5 +47,22 @@ public class CvService implements ICvService {
         this.userRepository.save(utente);
 
         this.generazionePDF.CreazionePDFFileSystem(utente, cvSaved);
+        cvSaved.setNome_file_pdf(this.generazionePDF.getPath(utente, cv));
+        this.cvRepository.save(cv);
     }
+
+
+    // metodo che dovrà modificare i campi cv della tabella e sostituire il pdf con i dati aggiornati.
+    @Override
+    public void modificaPDF_Record_CV(ModificaDatiPDF_DTO datiModificaPDF) throws IOException {
+
+        Optional<Users> utenteOpt = this.userRepository.findById(datiModificaPDF.getIdUtente());
+
+        if (utenteOpt.isEmpty()) {
+            throw new RuntimeException("L'utente non esiste.");
+        }
+
+    }
+
+
 }

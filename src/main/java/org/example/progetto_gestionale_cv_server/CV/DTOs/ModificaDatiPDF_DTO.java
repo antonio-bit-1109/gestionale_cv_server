@@ -1,0 +1,77 @@
+package org.example.progetto_gestionale_cv_server.CV.DTOs;
+
+import jakarta.validation.constraints.NotNull;
+
+public class ModificaDatiPDF_DTO {
+
+    @NotNull(message = "specificare id utente.")
+    private Long idUtente;
+    @NotNull(message = "titolo obbligatorio.")
+    private String titolo;
+    @NotNull(message = "competenze obbligatorie.")
+    private String competenze;
+    @NotNull(message = "istruzione obbligatoria.")
+    private String istruzione;
+    @NotNull(message = "esperienze precedenti obbligatorie.")
+    private String esperienzePrecedenti;
+    @NotNull(message = "inserire almeno una lingua conosciuta")
+    private String lingueConosciute;
+
+    private String descrizioneGenerale;
+
+    public String getTitolo() {
+        return titolo;
+    }
+
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
+    }
+
+    public Long getIdUtente() {
+        return idUtente;
+    }
+
+    public void setIdUtente(Long idUtente) {
+        this.idUtente = idUtente;
+    }
+
+    public String getCompetenze() {
+        return competenze;
+    }
+
+    public void setCompetenze(String competenze) {
+        this.competenze = competenze;
+    }
+
+    public String getEsperienzePrecedenti() {
+        return esperienzePrecedenti;
+    }
+
+    public void setEsperienzePrecedenti(String esperienzePrecedenti) {
+        this.esperienzePrecedenti = esperienzePrecedenti;
+    }
+
+    public String getIstruzione() {
+        return istruzione;
+    }
+
+    public void setIstruzione(String istruzione) {
+        this.istruzione = istruzione;
+    }
+
+    public String getLingueConosciute() {
+        return lingueConosciute;
+    }
+
+    public void setLingueConosciute(String lingueConosciute) {
+        this.lingueConosciute = lingueConosciute;
+    }
+
+    public String getDescrizioneGenerale() {
+        return descrizioneGenerale;
+    }
+
+    public void setDescrizioneGenerale(String descrizioneGenerale) {
+        this.descrizioneGenerale = descrizioneGenerale;
+    }
+}

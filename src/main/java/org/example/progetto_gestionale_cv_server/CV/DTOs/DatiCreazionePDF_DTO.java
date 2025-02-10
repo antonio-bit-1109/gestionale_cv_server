@@ -31,7 +31,7 @@ public class DatiCreazionePDF_DTO {
     }
 
     public void setDescrizioneGenerale(String descrizioneGenerale) {
-        descrizioneGenerale = descrizioneGenerale;
+        this.descrizioneGenerale = descrizioneGenerale;
     }
 
     public String getLingueConosciute() {

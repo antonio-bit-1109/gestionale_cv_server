@@ -2,6 +2,7 @@ package org.example.progetto_gestionale_cv_server.CV.controller;
 
 import jakarta.validation.Valid;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.DatiCreazionePDF_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.ModificaDatiPDF_DTO;
 import org.example.progetto_gestionale_cv_server.CV.service.CvService;
 import org.example.progetto_gestionale_cv_server.CV.service.ICvService;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,13 @@ public class CvController {
     }
 
     @PostMapping("edit")
-    public ResponseEntity<String> modificaPDF() {
-        return null
-                ;
+    public ResponseEntity<String> modificaPDF(@Valid @RequestBody ModificaDatiPDF_DTO datiModificaPDFDto) {
+        try {
+            this.cvService.modificaPDF_Record_CV(datiModificaPDFDto);
+            return new ResponseEntity<>("curriculum modificato con successo.", HttpStatus.OK);
+        } catch (RuntimeException | IOException ex) {
+            return new ResponseEntity<>("Errore durante la modifica del curriculum: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }
