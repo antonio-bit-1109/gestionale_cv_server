@@ -1,0 +1,3 @@
+-[] fai delete cv e relativo curriculum
+-[] get singolo cv
+-[] get tutti cv 

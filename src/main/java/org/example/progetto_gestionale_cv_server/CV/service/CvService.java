@@ -51,10 +51,8 @@ public class CvService implements ICvService {
     // metodo che dovrà modificare i campi cv della tabella e sostituire il pdf con i dati aggiornati.
     @Override
     public void modificaPDF_Record_CV(DatiCreazionePDF_DTO datiModificaPDF) throws IOException {
-
         Users user = returnUserIfExist(datiModificaPDF);
         this.mapperCv.ModificaCv(datiModificaPDF, user);
-
     }
 
     //privato

@@ -24,6 +24,7 @@ public class CvController {
         this.cvService = cvService;
     }
 
+    // creazione record cv e relativo file .pdf su file system
     @PostMapping("/create")
     public ResponseEntity<String> GeneraPdF(@Valid @RequestBody DatiCreazionePDF_DTO datiCreazionePDFDto) {
         try {
@@ -35,6 +36,8 @@ public class CvController {
         }
     }
 
+    // modifica record cv e relativo file .pdf su file system
+    // (è una modifica finta, viene cancellato e ricreato sulla base dei nuovi dati forniti dall utente)
     @PostMapping("edit")
     public ResponseEntity<String> modificaPDF(@Valid @RequestBody DatiCreazionePDF_DTO datiModificaPDFDto) {
         try {
