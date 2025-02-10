@@ -16,6 +16,9 @@ public class CVs {
     private Timestamp created_at;
 
     @Column(nullable = false)
+    private String titolo;
+
+    @Column(nullable = true)
     private Timestamp updated_at;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -30,6 +33,14 @@ public class CVs {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
+
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
+    }
+
+    public String getTitolo() {
+        return titolo;
+    }
 
     public Long getId() {
         return Id;

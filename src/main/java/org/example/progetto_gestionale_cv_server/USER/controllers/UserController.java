@@ -3,6 +3,7 @@ package org.example.progetto_gestionale_cv_server.USER.controllers;
 import jakarta.validation.Valid;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.USER.service.IUserService;
 import org.example.progetto_gestionale_cv_server.USER.service.UserService;
 import org.example.progetto_gestionale_cv_server.utility.Responses.TokenResponse;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     public UserController(UserService userservice) {
         this.userService = userservice;
