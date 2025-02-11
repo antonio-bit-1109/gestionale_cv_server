@@ -1,5 +1,7 @@
 package org.example.progetto_gestionale_cv_server.utility.validationDTO;
 
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.utility.customExceptions.CustomPatternException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+// questa classe è un vero e proprio controller che scatta quando viene rilevato un errore
 @RestControllerAdvice
 public class ValidationDTO {
 
@@ -26,5 +29,16 @@ public class ValidationDTO {
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    // questi metodi possono essere programmati per lanciare un errore custom
+    // e inviare nella response una mappa key value per mostrare un errore specifico
+    @ExceptionHandler(CustomPatternException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentExceptions(CustomPatternException ex) {
+        Map<String, String> errMap = new HashMap<>();
+        errMap.put(ex.getKeyField(), ex.getMessage());
+
+        return new ResponseEntity<>(errMap, HttpStatus.BAD_REQUEST);
+    }
 }
+
 

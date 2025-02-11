@@ -1,4 +1,6 @@
-package org.example.progetto_gestionale_cv_server.CV.DTOs;
+package org.example.progetto_gestionale_cv_server.CV.DTOs.resp;
+
+import org.example.progetto_gestionale_cv_server.CV.DTOs.BaseDTO;
 
 import java.sql.Timestamp;
 
@@ -13,6 +15,15 @@ public class Cv_get_DTO extends BaseDTO {
     private Timestamp created_at;
     private Timestamp updated_at;
     private String proprietarioCV;
+    private String Path_file_System_pdf;
+
+    public String getPath_file_System_pdf() {
+        return Path_file_System_pdf;
+    }
+
+    public void setPath_file_System_pdf(String path_file_System_pdf) {
+        Path_file_System_pdf = path_file_System_pdf;
+    }
 
     public Cv_get_DTO() {
     }

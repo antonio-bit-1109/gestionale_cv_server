@@ -1,7 +1,7 @@
 package org.example.progetto_gestionale_cv_server.USER.service;
 
-import org.example.progetto_gestionale_cv_server.USER.DTOs.LoginDTO;
-import org.example.progetto_gestionale_cv_server.USER.DTOs.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperUser;
@@ -27,7 +27,6 @@ public class UserService implements IUserService {
     public void registrazioneUtente(RegistrazioneUtenteDTO datiUtente) throws RuntimeException {
         Users utente = this.mapperUser.FromDTOToEntity(datiUtente);
         this.userRepository.save(utente);
-
     }
 
     @Override

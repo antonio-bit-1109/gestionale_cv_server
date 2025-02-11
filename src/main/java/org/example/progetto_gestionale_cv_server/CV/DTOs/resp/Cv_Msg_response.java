@@ -1,7 +1,6 @@
-package org.example.progetto_gestionale_cv_server.utility.Responses;
+package org.example.progetto_gestionale_cv_server.CV.DTOs.resp;
 
 import org.example.progetto_gestionale_cv_server.CV.DTOs.BaseDTO;
-import org.example.progetto_gestionale_cv_server.CV.service.CvService;
 
 public class Cv_Msg_response {
     private BaseDTO cv;

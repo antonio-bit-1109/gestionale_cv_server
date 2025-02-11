@@ -2,16 +2,21 @@ package org.example.progetto_gestionale_cv_server.CV.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.*;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiCreazionePDF_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.req.ID_UTENTE_CV_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Get_All_cv_DTO;
 import org.example.progetto_gestionale_cv_server.CV.service.CvService;
 import org.example.progetto_gestionale_cv_server.CV.service.ICvService;
-import org.example.progetto_gestionale_cv_server.utility.Responses.Cv_Msg_response;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Cv_Msg_response;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/cv")
@@ -75,9 +80,10 @@ public class CvController {
     @GetMapping("/get-all/{id}")
     public ResponseEntity<Get_All_cv_DTO> getAllCV(@PathVariable("id") @NotNull @NumberFormat Long id_utente) {
         try {
-            return null;
+            List<BaseDTO> listaCV = this.cvService.getAll_CV(id_utente);
+            return new ResponseEntity<>(new Get_All_cv_DTO(listaCV, null), HttpStatus.OK);
         } catch (RuntimeException e) {
-            throw new RuntimeException("errore durante il reperimento dei curriculum dell'utente: " + e.getMessage());
+            return new ResponseEntity<>(new Get_All_cv_DTO(null, "Errore durante il reperimento di tutti i curriculum relativi all'utente."), HttpStatus.OK);
         }
     }
 }

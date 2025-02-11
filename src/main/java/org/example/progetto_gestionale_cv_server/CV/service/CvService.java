@@ -1,8 +1,8 @@
 package org.example.progetto_gestionale_cv_server.CV.service;
 
 import org.example.progetto_gestionale_cv_server.CV.DTOs.BaseDTO;
-import org.example.progetto_gestionale_cv_server.CV.DTOs.ID_UTENTE_CV_DTO;
-import org.example.progetto_gestionale_cv_server.CV.DTOs.DatiCreazionePDF_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.req.ID_UTENTE_CV_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiCreazionePDF_DTO;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -12,6 +12,8 @@ import org.example.progetto_gestionale_cv_server.utility.generazionePDF.Generazi
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,8 +45,7 @@ public class CvService implements ICvService {
         this.userRepository.save(utente);
 
         this.generazionePDF.CreazionePDFFileSystem(utente, cvSaved, false);
-//        cvSaved.setNome_file_pdf(this.generazionePDF.getPath(utente, cv));
-        this.cvRepository.save(cv);
+
     }
 
 
@@ -89,6 +90,20 @@ public class CvService implements ICvService {
 
         throw new RuntimeException("impossibile trovare il cv specificato");
 
+    }
+
+    @Override
+    public List<BaseDTO> getAll_CV(Long id_utente) {
+        Users user = this.returnUserIfExist(id_utente);
+
+        List<BaseDTO> listaCV = new ArrayList<>();
+
+        for (CVs cv : user.getListaCv()) {
+            BaseDTO cvDTO = this.mapperCv.fromEntityToDTO(cv);
+            listaCV.add(cvDTO);
+        }
+
+        return listaCV;
     }
 
 

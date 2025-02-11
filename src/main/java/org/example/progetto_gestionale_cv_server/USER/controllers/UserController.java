@@ -1,11 +1,11 @@
 package org.example.progetto_gestionale_cv_server.USER.controllers;
 
 import jakarta.validation.Valid;
-import org.example.progetto_gestionale_cv_server.USER.DTOs.LoginDTO;
-import org.example.progetto_gestionale_cv_server.USER.DTOs.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.service.IUserService;
 import org.example.progetto_gestionale_cv_server.USER.service.UserService;
-import org.example.progetto_gestionale_cv_server.utility.Responses.TokenResponse;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.TokenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

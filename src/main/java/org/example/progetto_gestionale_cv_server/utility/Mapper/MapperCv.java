@@ -1,8 +1,8 @@
 package org.example.progetto_gestionale_cv_server.utility.Mapper;
 
 import org.example.progetto_gestionale_cv_server.CV.DTOs.BaseDTO;
-import org.example.progetto_gestionale_cv_server.CV.DTOs.Cv_get_DTO;
-import org.example.progetto_gestionale_cv_server.CV.DTOs.DatiCreazionePDF_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Cv_get_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiCreazionePDF_DTO;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -11,9 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Component
 public class MapperCv {
@@ -45,6 +43,7 @@ public class MapperCv {
     // data l'entity cv ritorna una dto ad hoc per la get del singolo cv
     public BaseDTO fromEntityToDTO(CVs cv) {
         Cv_get_DTO cvDTO = new Cv_get_DTO();
+        cvDTO.setPath_file_System_pdf(cv.getNome_file_pdf());
         cvDTO.setCompetenze(cv.getCompetenze());
         cvDTO.setCreated_at(cv.getCreated_at());
         cvDTO.setDescrizioneGenerale(cv.getDescrizioneGenerale());
@@ -95,7 +94,7 @@ public class MapperCv {
             }
 
             this.generazionePDF.CreazionePDFFileSystem(users, cv, true);
-            this.cvRepository.save(cv);
+//            this.cvRepository.save(cv);
         }
 
 

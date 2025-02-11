@@ -1,6 +1,5 @@
-package org.example.progetto_gestionale_cv_server.CV.DTOs;
+package org.example.progetto_gestionale_cv_server.CV.DTOs.req;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class DatiCreazionePDF_DTO {

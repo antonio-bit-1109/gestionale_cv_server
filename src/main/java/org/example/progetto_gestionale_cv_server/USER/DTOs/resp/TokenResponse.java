@@ -1,4 +1,4 @@
-package org.example.progetto_gestionale_cv_server.utility.Responses;
+package org.example.progetto_gestionale_cv_server.USER.DTOs.resp;
 
 public class TokenResponse {
 

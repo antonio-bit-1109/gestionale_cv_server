@@ -1,6 +1,6 @@
 package org.example.progetto_gestionale_cv_server.utility.Mapper;
 
-import org.example.progetto_gestionale_cv_server.USER.DTOs.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

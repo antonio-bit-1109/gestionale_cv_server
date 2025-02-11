@@ -1,13 +1,19 @@
 package org.example.progetto_gestionale_cv_server.utility.generazionePDF;
 
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
+import jakarta.persistence.criteria.Root;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
+import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
+import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,6 +24,14 @@ import java.util.UUID;
 
 @Component
 public class GenerazionePDF {
+
+    private final UserRepository userRepository;
+    private final CvRepository cvRepository;
+
+    public GenerazionePDF(UserRepository userRepo, CvRepository cvRepo) {
+        this.userRepository = userRepo;
+        this.cvRepository = cvRepo;
+    }
 
     // stabilisci il percorso nel quale salvare il pdf creato
     public String getPath(Users utente, CVs cv) {
@@ -57,6 +71,18 @@ public class GenerazionePDF {
                     .setFontSize(18);
             document.add(title);
 
+            // Add the image
+            String imagePath = Paths.get("").toAbsolutePath() + "/src/main/resources/static/images/default.jpg";
+            try {
+                ImageData imageData = ImageDataFactory.create(imagePath);
+                Image image = new Image(imageData).setWidth(200).setHeight(200);
+                document.add(image);
+                cv.setProfileImage(imagePath);
+            } catch (IOException e) {
+                throw new IOException("Errore durante il caricamento dell'immagine: " + e.getMessage(), e);
+            }
+
+
             // Left-aligned CV data
             document.add(new Paragraph(new Text("Nome: ").setBold()).add(utente.getNome()));
             document.add(new Paragraph("Cognome: " + utente.getCognome()));
@@ -66,6 +92,9 @@ public class GenerazionePDF {
             document.add(new Paragraph("Istruzione: " + cv.getIstruzione()));
             document.add(new Paragraph("Descrizione generale: " + cv.getDescrizioneGenerale()));
             document.add(new Paragraph("Lingue conosciute: " + cv.getLingueConosciute()));
+
+            this.cvRepository.save(cv);
+            this.userRepository.save(utente);
         } catch (IOException e) {
             throw new IOException("Errore durante la creazione del PDF: " + e.getMessage(), e);
         }

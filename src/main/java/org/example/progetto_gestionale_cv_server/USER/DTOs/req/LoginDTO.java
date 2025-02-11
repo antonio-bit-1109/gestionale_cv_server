@@ -1,4 +1,4 @@
-package org.example.progetto_gestionale_cv_server.USER.DTOs;
+package org.example.progetto_gestionale_cv_server.USER.DTOs.req;
 
 public class LoginDTO {
 

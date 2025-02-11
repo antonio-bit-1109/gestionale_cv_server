@@ -1,4 +1,4 @@
-package org.example.progetto_gestionale_cv_server.CV.DTOs;
+package org.example.progetto_gestionale_cv_server.CV.DTOs.req;
 
 public class ID_UTENTE_CV_DTO {
 
