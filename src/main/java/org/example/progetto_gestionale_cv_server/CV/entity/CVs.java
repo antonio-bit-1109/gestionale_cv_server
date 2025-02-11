@@ -24,7 +24,7 @@ public class CVs {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String istruzione;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private Users user;
     @Column(nullable = true)
     private String nome_file_pdf;

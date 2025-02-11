@@ -6,7 +6,7 @@ import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiCreazionePDF_DT
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
-import org.example.progetto_gestionale_cv_server.utility.generazionePDF.GenerazionePDF;
+import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.GenerazionePDF;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

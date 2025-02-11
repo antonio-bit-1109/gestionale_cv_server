@@ -8,7 +8,7 @@ import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperCv;
-import org.example.progetto_gestionale_cv_server.utility.generazionePDF.GenerazionePDF;
+import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.GenerazionePDF;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

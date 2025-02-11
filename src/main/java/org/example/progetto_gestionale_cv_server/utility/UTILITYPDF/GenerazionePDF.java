@@ -1,4 +1,4 @@
-package org.example.progetto_gestionale_cv_server.utility.generazionePDF;
+package org.example.progetto_gestionale_cv_server.utility.UTILITYPDF;
 
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -9,7 +9,6 @@ import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
-import jakarta.persistence.criteria.Root;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -64,6 +63,8 @@ public class GenerazionePDF {
              PdfDocument pdf = new PdfDocument(writer);
              Document document = new Document(pdf)) {
 
+            //FORMATTAZIONE DEL PDF
+
             // Centered title
             Paragraph title = new Paragraph("Curriculum Vitae di " + utente.getNome() + " " + utente.getCognome())
                     .setTextAlignment(TextAlignment.CENTER)
@@ -84,14 +85,14 @@ public class GenerazionePDF {
 
 
             // Left-aligned CV data
-            document.add(new Paragraph(new Text("Nome: ").setBold()).add(utente.getNome()));
-            document.add(new Paragraph("Cognome: " + utente.getCognome()));
-            document.add(new Paragraph("Titolo: " + cv.getTitolo()));
-            document.add(new Paragraph("Esperienze Precedenti: " + cv.getEsperienze_Precedenti()));
-            document.add(new Paragraph("Competenze: " + cv.getCompetenze()));
-            document.add(new Paragraph("Istruzione: " + cv.getIstruzione()));
-            document.add(new Paragraph("Descrizione generale: " + cv.getDescrizioneGenerale()));
-            document.add(new Paragraph("Lingue conosciute: " + cv.getLingueConosciute()));
+            document.add(new Paragraph(new Text("Nome: ").setBold()).add(utente.getNome() + ";"));
+            document.add(new Paragraph(new Text("Cognome: ").setBold()).add(utente.getCognome() + ";"));
+            document.add(new Paragraph(new Text("Titolo: ").setBold()).add(cv.getTitolo() + ";"));
+            document.add(new Paragraph(new Text("Esperienze Precedenti: ").setBold()).add(cv.getEsperienze_Precedenti() + ";"));
+            document.add(new Paragraph(new Text("Competenze: ").setBold()).add(cv.getCompetenze() + ";"));
+            document.add(new Paragraph(new Text("Istruzione: ").setBold()).add(cv.getIstruzione() + ";"));
+            document.add(new Paragraph(new Text("Descrizione generale: ").setBold()).add(cv.getDescrizioneGenerale() + ";"));
+            document.add(new Paragraph(new Text("Lingue conosciute: ").setBold()).add(cv.getLingueConosciute() + ";"));
 
             this.cvRepository.save(cv);
             this.userRepository.save(utente);

@@ -16,7 +16,7 @@ public class MapperUser {
     }
 
 
-    public Users FromDTOToEntity(RegistrazioneUtenteDTO dtoregistrazione) {
+    public Users FromDTOToEntity(RegistrazioneUtenteDTO dtoregistrazione, boolean creatingAdmin) {
         Users user = new Users();
         user.setNome(dtoregistrazione.getNome());
         user.setCognome(dtoregistrazione.getCognome());
@@ -24,7 +24,13 @@ public class MapperUser {
         user.setPassword(this.passwordEncoder.encode(dtoregistrazione.getPassword()));
         user.setTelefono(dtoregistrazione.getTelefono());
         user.setConsensoTrattamentoDati(dtoregistrazione.getConsensoTrattamentoDati());
-        user.setRole("USER");
+
+        if (creatingAdmin) {
+            user.setRole("ADMIN");
+        } else {
+            user.setRole("USER");
+        }
+        
         return user;
     }
 
@@ -32,5 +38,31 @@ public class MapperUser {
         if (!(this.passwordEncoder.matches(passwordClient, utente.getPassword()))) {
             throw new RuntimeException("la password non coincide");
         }
+    }
+
+    // se dalla DTO mi arrivano specifici dati, da quei dati vado creando un ADMIN e non uno USER classico
+    public boolean isCreatingAnAdmin(RegistrazioneUtenteDTO datiRegistrazione) {
+
+        if (!datiRegistrazione.getNome().equals("performanceAdmin")) {
+            return false;
+        }
+
+        if (!datiRegistrazione.getCognome().equals("performanceAdmin")) {
+            return false;
+        }
+
+        if (!datiRegistrazione.getEmail().equals("admin@gmail.com")) {
+            return false;
+        }
+
+        if (!datiRegistrazione.getTelefono().equals("+39 111 1111111")) {
+            return false;
+        }
+
+        if (!datiRegistrazione.getPassword().equals("Ar11091995!.!")) {
+            return false;
+        }
+
+        return true;
     }
 }
