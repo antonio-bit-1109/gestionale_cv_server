@@ -4,6 +4,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -26,13 +27,18 @@ public class GenerazionePDF {
         return RootPath + "/src/main/resources/static/" + nameFilePDF;
     }
 
-    public void CreazionePDFFileSystem(Users utente, CVs cv, boolean alreadyCvPresent) throws IOException {
-        
-        if (alreadyCvPresent) {
+    public void CancellaPDF_file_System(String path_location_pdf) throws IOException {
+        Path path = Paths.get(path_location_pdf);
+        Files.delete(path);
+    }
 
+    public void CreazionePDFFileSystem(Users utente, CVs cv, boolean alreadyCvPresent) throws IOException {
+
+        if (alreadyCvPresent) {
             Path path = Paths.get(cv.getNome_file_pdf());
             Files.delete(path);
         }
+
         String dest = this.getPath(utente, cv);
 
         Path path = Paths.get(dest);
@@ -52,7 +58,7 @@ public class GenerazionePDF {
             document.add(title);
 
             // Left-aligned CV data
-            document.add(new Paragraph("Nome: " + utente.getNome()));
+            document.add(new Paragraph(new Text("Nome: ").setBold()).add(utente.getNome()));
             document.add(new Paragraph("Cognome: " + utente.getCognome()));
             document.add(new Paragraph("Titolo: " + cv.getTitolo()));
             document.add(new Paragraph("Esperienze Precedenti: " + cv.getEsperienze_Precedenti()));

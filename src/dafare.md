@@ -1,3 +1,4 @@
--[] fai delete cv e relativo curriculum
--[] get singolo cv
--[] get tutti cv 
+-[x] fai delete cv e relativo curriculum
+-[x] get singolo cv
+ -[] get tutti cv
+- [] upload foto utente

@@ -1,15 +1,15 @@
 package org.example.progetto_gestionale_cv_server.CV.controller;
 
 import jakarta.validation.Valid;
-import org.example.progetto_gestionale_cv_server.CV.DTOs.DatiCreazionePDF_DTO;
+import jakarta.validation.constraints.NotNull;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.*;
 import org.example.progetto_gestionale_cv_server.CV.service.CvService;
 import org.example.progetto_gestionale_cv_server.CV.service.ICvService;
+import org.example.progetto_gestionale_cv_server.utility.Responses.Cv_Msg_response;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -47,5 +47,37 @@ public class CvController {
             return new ResponseEntity<>("Errore durante la modifica del curriculum: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> cancellaCV(@Valid @RequestBody ID_UTENTE_CV_DTO ids_utente_cv) {
+        try {
+            this.cvService.CancellaCV(ids_utente_cv);
+            return new ResponseEntity<>("cv cancellato con successo.", HttpStatus.OK);
+        } catch (RuntimeException | IOException ex) {
+            return new ResponseEntity<>("errore durante la cancellazione del curriculum: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/get")
+    public ResponseEntity<Cv_Msg_response> getCV(@Valid @RequestBody ID_UTENTE_CV_DTO ids_utente_cv) {
+        try {
+
+            BaseDTO cvDTO = this.cvService.getCv(ids_utente_cv);
+            return new ResponseEntity<>(new Cv_Msg_response(cvDTO, null), HttpStatus.OK);
+
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>(new Cv_Msg_response(null, "errore durante il reperimento del cv: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // specifico che il parametro in entrata sia l'id dell utente , tipo numerico e non null
+    @GetMapping("/get-all/{id}")
+    public ResponseEntity<Get_All_cv_DTO> getAllCV(@PathVariable("id") @NotNull @NumberFormat Long id_utente) {
+        try {
+            return null;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("errore durante il reperimento dei curriculum dell'utente: " + e.getMessage());
+        }
     }
 }

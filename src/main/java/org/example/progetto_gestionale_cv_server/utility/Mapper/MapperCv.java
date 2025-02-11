@@ -1,5 +1,7 @@
 package org.example.progetto_gestionale_cv_server.utility.Mapper;
 
+import org.example.progetto_gestionale_cv_server.CV.DTOs.BaseDTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.Cv_get_DTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.DatiCreazionePDF_DTO;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
@@ -38,6 +40,21 @@ public class MapperCv {
         cvEntity.setDescrizioneGenerale(datiPdf.getDescrizioneGenerale());
         cvEntity.setCreated_at(oraCorrente);
         return cvEntity;
+    }
+
+    // data l'entity cv ritorna una dto ad hoc per la get del singolo cv
+    public BaseDTO fromEntityToDTO(CVs cv) {
+        Cv_get_DTO cvDTO = new Cv_get_DTO();
+        cvDTO.setCompetenze(cv.getCompetenze());
+        cvDTO.setCreated_at(cv.getCreated_at());
+        cvDTO.setDescrizioneGenerale(cv.getDescrizioneGenerale());
+        cvDTO.setIstruzione(cv.getIstruzione());
+        cvDTO.setLingueConosciute(cv.getLingueConosciute());
+        cvDTO.setUpdated_at(cv.getUpdated_at());
+        cvDTO.setTitolo(cv.getTitolo());
+        cvDTO.setEsperienze_Precedenti(cv.getEsperienze_Precedenti());
+        cvDTO.setProprietarioCV(cv.getUser().getNome() + " " + cv.getUser().getCognome());
+        return cvDTO;
     }
 
     public void ModificaCv(DatiCreazionePDF_DTO datipdf, Users users) throws RuntimeException, IOException {
