@@ -35,16 +35,6 @@ public class UserService implements IUserService {
     @Override
     public boolean registrazioneUtente(RegistrazioneUtenteDTO datiUtente) throws RuntimeException {
 
-        // controllo aggiuntivo per garantire un solo utente ADMIN
-        // non dovrebbe essere necessario in quanto già la email è unique
-        // quindi garantisce che solo un utente abbia la email giusta per poter essere registrato come admin
-//        List<Credenziali> listaAdmin = this.credenzialiRepository
-//        List<Credenziali> listaAdmin = this.credenzialiRepository.findByRole("ADMIN");
-//        List<Credenziali> listaAdmin = this.credenzialiRepository.findByRole("ADMIN");
-//        if (listaAdmin.size() == 1) {
-//            throw new RuntimeException("non è possibile avere più di un profilo ADMIN");
-//        }
-
         if (this.mapperUser.isCreatingAnAdmin(datiUtente)) {
             return this.MapUtenteToEntity(datiUtente, true);
         } else {
