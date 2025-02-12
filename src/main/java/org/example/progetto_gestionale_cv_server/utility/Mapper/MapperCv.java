@@ -1,23 +1,26 @@
 package org.example.progetto_gestionale_cv_server.utility.Mapper;
 
 import org.example.progetto_gestionale_cv_server.CV.DTOs.BaseDTO;
-import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Cv_get_DTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiCreazionePDF_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiModifica_cv_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Cv_get_DTO;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.GenerazionePDF;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 @Component
 public class MapperCv {
 
-    private CvRepository cvRepository;
-    private GenerazionePDF generazionePDF;
+    private final CvRepository cvRepository;
+    private final GenerazionePDF generazionePDF;
 
     //costr
     public MapperCv(CvRepository cvRepository, GenerazionePDF generazionePDF) {
@@ -56,7 +59,7 @@ public class MapperCv {
         return cvDTO;
     }
 
-    public void ModificaCv(DatiCreazionePDF_DTO datipdf, Users users) throws RuntimeException, IOException {
+    public void ModificaCv(DatiModifica_cv_DTO datipdf, Users users) throws RuntimeException, IOException {
 
         LocalDateTime dataCorrente = LocalDateTime.now();
         Timestamp oraCorrente = Timestamp.valueOf(dataCorrente);
@@ -66,6 +69,11 @@ public class MapperCv {
             if (!(cv.getUser().getId().equals(datipdf.getIdUtente()))) {
                 throw new RuntimeException("L'utente che sta cercando di modificare il curriculum non è il possessore del curriculum");
             }
+
+            if (!cv.getId().equals(datipdf.getIdCv())) {
+                continue;
+            }
+
 
             cv.setUpdated_at(oraCorrente);
 
@@ -94,9 +102,24 @@ public class MapperCv {
             }
 
             this.generazionePDF.CreazionePDFFileSystem(users, cv, true);
-//            this.cvRepository.save(cv);
         }
 
+    }
 
+    public void createCv(HashMap<String, String> mappaParti, MultipartFile file, String percorsoFileSuServer) {
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        Timestamp currentTimestamp = Timestamp.valueOf(currentTime);
+        CVs cv = new CVs();
+
+        cv.setNome_file_pdf(percorsoFileSuServer + file.getOriginalFilename());
+        cv.setLingueConosciute(mappaParti.get("lingue_conosciute"));
+        cv.setTitolo(mappaParti.get("titolo"));
+        cv.setCreated_at(currentTimestamp);
+        cv.setIstruzione(mappaParti.get("istruzione"));
+        cv.setEsperienze_Precedenti(mappaParti.get("esperienze_precedenti"));
+        cv.setCompetenze(mappaParti.get("competenze"));
+        cv.setDescrizioneGenerale(mappaParti.get("descrizione_generale"));
+        this.cvRepository.save(cv);
     }
 }

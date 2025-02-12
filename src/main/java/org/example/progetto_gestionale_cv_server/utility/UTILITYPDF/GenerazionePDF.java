@@ -78,7 +78,7 @@ public class GenerazionePDF {
                 ImageData imageData = ImageDataFactory.create(imagePath);
                 Image image = new Image(imageData).setWidth(200).setHeight(200);
                 document.add(image);
-                cv.setProfileImage(imagePath);
+
             } catch (IOException e) {
                 throw new IOException("Errore durante il caricamento dell'immagine: " + e.getMessage(), e);
             }

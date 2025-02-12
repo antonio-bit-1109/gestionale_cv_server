@@ -1,6 +1,7 @@
 package org.example.progetto_gestionale_cv_server.CV.service;
 
 import org.example.progetto_gestionale_cv_server.CV.DTOs.BaseDTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiModifica_cv_DTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.ID_UTENTE_CV_DTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiCreazionePDF_DTO;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
@@ -10,6 +11,7 @@ import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperCv;
 import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.GenerazionePDF;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,29 +53,40 @@ public class CvService implements ICvService {
 
     // metodo che dovrà modificare i campi cv della tabella e sostituire il pdf con i dati aggiornati.
     @Override
-    public void modificaPDF_Record_CV(DatiCreazionePDF_DTO datiModificaPDF) throws IOException {
+    public void modificaPDF_Record_CV(DatiModifica_cv_DTO datiModificaPDF) throws IOException {
         Users user = returnUserIfExist(datiModificaPDF.getIdUtente());
         this.mapperCv.ModificaCv(datiModificaPDF, user);
     }
 
+    @Transactional
     @Override
     public void CancellaCV(ID_UTENTE_CV_DTO ids_utente_cv) throws IOException {
 
+
         CVs cv = this.returnCvIfExist(ids_utente_cv.getId_cv());
-        Users utente = this.returnUserIfExist(ids_utente_cv.getId_utente());
 
-        utente.getListaCv().forEach(cVs -> {
+        if (cv.getUser().getId().equals(ids_utente_cv.getId_utente())) {
+            this.cvRepository.delete(cv);
 
-            if (cVs.getId().equals(cv.getId())) {
-                try {
-                    this.generazionePDF.CancellaPDF_file_System(cv.getNome_file_pdf());
-                } catch (IOException e) {
-                    throw new RuntimeException("errore durante la cancellazione dal file system del file pdf:" + e.getMessage());
-                }
-                this.cvRepository.delete(cv);
+        } else {
+            throw new RuntimeException("l'utente che sta cercando di eliminare questo cv non è il proprietario del cv.");
+        }
 
-            }
-        });
+//        Users utente = this.returnUserIfExist(ids_utente_cv.getId_utente());
+//        utente.getListaCv().forEach(cVs -> {
+//
+//            if (cVs.getId().equals(cv.getId())) {
+//                try {
+//                    this.generazionePDF.CancellaPDF_file_System(cv.getNome_file_pdf());
+//                } catch (IOException e) {
+//                    throw new RuntimeException("errore durante la cancellazione dal file system del file pdf:" + e.getMessage());
+//                }
+//                this.cvRepository.delete(cv);
+//
+//            } else {
+//                throw new RuntimeException("nessun cv trovato da cancellare.");
+//            }
+//        });
 
 
     }

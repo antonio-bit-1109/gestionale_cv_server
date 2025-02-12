@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/admin")
@@ -26,7 +26,15 @@ public class AdminController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> caricaCvPdf(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> caricaCvPdf(
+            @RequestParam("file") MultipartFile file,
+            @RequestPart("titolo") String titolo,
+            @RequestPart("competenze") String competenze,
+            @RequestPart("descrizione_generale") String descrizione_generale,
+            @RequestPart("esperienze_precedenti") String esperienze_precedenti,
+            @RequestPart("istruzione") String istruzione,
+            @RequestPart("lingue_conosciute") String lingue_conosciute
+    ) {
 
         if (file.isEmpty()) {
             return new ResponseEntity<>("nessun file inviato", HttpStatus.BAD_REQUEST);
@@ -34,8 +42,16 @@ public class AdminController {
 
         try {
 
-            this.adminService.savePDForfano(file);
-            return new ResponseEntity<>("file salvato con successo", HttpStatus.OK);
+            HashMap<String, String> mappaParti = new HashMap<>();
+            mappaParti.put("titolo", titolo);
+            mappaParti.put("competenze", competenze);
+            mappaParti.put("descrizione_generale", descrizione_generale);
+            mappaParti.put("esperienze_precedenti", esperienze_precedenti);
+            mappaParti.put("istruzione", istruzione);
+            mappaParti.put("lingue_conosciute", lingue_conosciute);
+
+            this.adminService.savePDForfano(file, mappaParti);
+            return new ResponseEntity<>("file pdf salvato con successo", HttpStatus.OK);
 
         } catch (RuntimeException | IOException e) {
             return new ResponseEntity<>("errore durante il salvataggio del file: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,41 +1,63 @@
 package org.example.progetto_gestionale_cv_server.utility.Mapper;
 
+import org.example.progetto_gestionale_cv_server.CREDENZIALI.entity.Credenziali;
+import org.example.progetto_gestionale_cv_server.CREDENZIALI.repository.CredenzialiRepository;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
+import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.nio.file.Paths;
 
 @Component
 public class MapperUser {
 
     private final BCryptPasswordEncoder passwordEncoder;
+    private final CredenzialiRepository credenzialiRepository;
+    private final UserRepository userRepository;
 
     //costruttore privato
-    private MapperUser(BCryptPasswordEncoder passwordEncoder) {
+    private MapperUser(BCryptPasswordEncoder passwordEncoder, CredenzialiRepository credenzialiRepository, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
+        this.credenzialiRepository = credenzialiRepository;
+        this.userRepository = userRepository;
     }
 
 
-    public Users FromDTOToEntity(RegistrazioneUtenteDTO dtoregistrazione, boolean creatingAdmin) {
+    public boolean FromDTOToEntity(RegistrazioneUtenteDTO dtoregistrazione, boolean creatingAdmin) {
+
+        String ImmagineDefault_profilo = Paths.get("").toAbsolutePath() + "/src/main/resources/static/images/default.jpg";
+
+
         Users user = new Users();
         user.setNome(dtoregistrazione.getNome());
         user.setCognome(dtoregistrazione.getCognome());
-        user.setEmail(dtoregistrazione.getEmail());
-        user.setPassword(this.passwordEncoder.encode(dtoregistrazione.getPassword()));
         user.setTelefono(dtoregistrazione.getTelefono());
+        user.setProfileImage(ImmagineDefault_profilo);
         user.setConsensoTrattamentoDati(dtoregistrazione.getConsensoTrattamentoDati());
 
+        Credenziali credenziali = new Credenziali();
+        credenziali.setPassword(this.passwordEncoder.encode(dtoregistrazione.getPassword()));
+        credenziali.setEmail(dtoregistrazione.getEmail());
+        credenziali.setUser(user);
+
         if (creatingAdmin) {
-            user.setRole("ADMIN");
+            credenziali.setRole("ADMIN");
         } else {
-            user.setRole("USER");
+            credenziali.setRole("USER");
         }
-        
-        return user;
+
+        user.setCredenziali(credenziali);
+        this.userRepository.save(user);
+        this.credenzialiRepository.save(credenziali);
+
+        return creatingAdmin;
+
     }
 
-    public void confirmPassword(Users utente, String passwordClient) {
-        if (!(this.passwordEncoder.matches(passwordClient, utente.getPassword()))) {
+    public void confirmPassword(Credenziali credenzialiUtente, String passwordClient) {
+        if (!(this.passwordEncoder.matches(passwordClient, credenzialiUtente.getPassword()))) {
             throw new RuntimeException("la password non coincide");
         }
     }

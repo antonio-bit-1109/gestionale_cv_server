@@ -1,6 +1,8 @@
 package org.example.progetto_gestionale_cv_server.USER.service;
 
 import org.apache.catalina.User;
+import org.example.progetto_gestionale_cv_server.CREDENZIALI.entity.Credenziali;
+import org.example.progetto_gestionale_cv_server.CREDENZIALI.repository.CredenzialiRepository;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -16,53 +18,62 @@ import java.util.Optional;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final CredenzialiRepository credenzialiRepository;
     private final MapperUser mapperUser;
     private final GenerateToken generateToken;
 
-    public UserService(UserRepository userRepo, MapperUser mapperuser, GenerateToken generateToken) {
+    public UserService(UserRepository userRepo, MapperUser mapperuser, GenerateToken generateToken, CredenzialiRepository credenzialiRepository) {
         this.userRepository = userRepo;
         this.mapperUser = mapperuser;
         this.generateToken = generateToken;
+        this.credenzialiRepository = credenzialiRepository;
     }
 
 
     // se i dati inviati rispettano certe credenziali viene creato un utente ADMIN altrimenti solo utenti USER
     // può essere creato solo 1 utente ADMIN per l'applicazione
     @Override
-    public void registrazioneUtente(RegistrazioneUtenteDTO datiUtente) throws RuntimeException {
+    public boolean registrazioneUtente(RegistrazioneUtenteDTO datiUtente) throws RuntimeException {
 
         // controllo aggiuntivo per garantire un solo utente ADMIN
         // non dovrebbe essere necessario in quanto già la email è unique
         // quindi garantisce che solo un utente abbia la email giusta per poter essere registrato come admin
-        List<Users> listaAdmin = this.userRepository.findByRole("ADMIN");
-        if (listaAdmin.size() == 1) {
-            throw new RuntimeException("non è possibile avere più di un profilo ADMIN");
-        }
+//        List<Credenziali> listaAdmin = this.credenzialiRepository
+//        List<Credenziali> listaAdmin = this.credenzialiRepository.findByRole("ADMIN");
+//        List<Credenziali> listaAdmin = this.credenzialiRepository.findByRole("ADMIN");
+//        if (listaAdmin.size() == 1) {
+//            throw new RuntimeException("non è possibile avere più di un profilo ADMIN");
+//        }
 
         if (this.mapperUser.isCreatingAnAdmin(datiUtente)) {
-            this.MapUtenteToEntity(datiUtente, true);
+            return this.MapUtenteToEntity(datiUtente, true);
         } else {
-            this.MapUtenteToEntity(datiUtente, false);
+            return this.MapUtenteToEntity(datiUtente, false);
         }
 
     }
 
-    private void MapUtenteToEntity(RegistrazioneUtenteDTO datiUtente, boolean isAdmin) {
-        Users utente = this.mapperUser.FromDTOToEntity(datiUtente, isAdmin);
-        this.userRepository.save(utente);
+    // mappa dto a utente e credenziali e li salva nel db
+    private boolean MapUtenteToEntity(RegistrazioneUtenteDTO datiUtente, boolean isAdmin) {
+        return this.mapperUser.FromDTOToEntity(datiUtente, isAdmin);
+
     }
 
     @Override
     public String doLogin(LoginDTO datiLogin) throws RuntimeException {
 
-        Optional<Users> utenteOptional = this.userRepository.findByEmail(datiLogin.getEmail());
+//        Optional<Users> utenteOptional = this.userRepository.findByEmail(datiLogin.getEmail());
+        Optional<Credenziali> credenzialiOptional = this.credenzialiRepository.findByEmail(datiLogin.getEmail());
 
-        if (utenteOptional.isEmpty()) {
-            throw new RuntimeException("l'utente non esiste.");
+        if (credenzialiOptional.isEmpty()) {
+            throw new RuntimeException("l'utente con le credenziali selezionate non esiste.");
         }
 
-        Users utente = utenteOptional.get();
-        this.mapperUser.confirmPassword(utente, datiLogin.getPassword());
-        return this.generateToken.tokenGeneration(utente);
+        Credenziali credenzialiUtente = credenzialiOptional.get();
+
+        this.mapperUser.confirmPassword(credenzialiUtente, datiLogin.getPassword());
+
+        Users utenteAssociato = credenzialiUtente.getUser();
+        return this.generateToken.tokenGeneration(utenteAssociato);
     }
 }

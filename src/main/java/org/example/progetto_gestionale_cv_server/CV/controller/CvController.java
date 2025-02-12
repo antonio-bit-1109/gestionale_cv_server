@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.*;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiCreazionePDF_DTO;
+import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiModifica_cv_DTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.ID_UTENTE_CV_DTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Get_All_cv_DTO;
 import org.example.progetto_gestionale_cv_server.CV.service.CvService;
@@ -44,7 +45,7 @@ public class CvController {
     // modifica record cv e relativo file .pdf su file system
     // (è una modifica finta, viene cancellato e ricreato sulla base dei nuovi dati forniti dall utente)
     @PostMapping("edit")
-    public ResponseEntity<String> modificaPDF(@Valid @RequestBody DatiCreazionePDF_DTO datiModificaPDFDto) {
+    public ResponseEntity<String> modificaPDF(@Valid @RequestBody DatiModifica_cv_DTO datiModificaPDFDto) {
         try {
             this.cvService.modificaPDF_Record_CV(datiModificaPDFDto);
             return new ResponseEntity<>("curriculum modificato con successo.", HttpStatus.OK);
@@ -55,7 +56,8 @@ public class CvController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> cancellaCV(@Valid @RequestBody ID_UTENTE_CV_DTO ids_utente_cv) {
+    public ResponseEntity<String> cancellaCV(
+            @Valid @RequestBody ID_UTENTE_CV_DTO ids_utente_cv) {
         try {
             this.cvService.CancellaCV(ids_utente_cv);
             return new ResponseEntity<>("cv cancellato con successo.", HttpStatus.OK);

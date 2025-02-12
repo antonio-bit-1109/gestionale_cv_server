@@ -1,6 +1,7 @@
 package org.example.progetto_gestionale_cv_server.USER.entity;
 
 import jakarta.persistence.*;
+import org.example.progetto_gestionale_cv_server.CREDENZIALI.entity.Credenziali;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 
 import java.util.List;
@@ -18,24 +19,40 @@ public class Users {
     @Column(nullable = false, length = 100)
     private String cognome;
 
-    @Column(nullable = false, length = 100, unique = true)
-    private String email;
 
     @Column(nullable = false, length = 15)
     private String telefono;
 
-    @Column(nullable = false)
-    private String password;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CVs> listaCv;
-
-    @Column(nullable = false)
-    private String role;
+    @Column(nullable = true)
+    private String profileImage;
 
     @Column(nullable = false)
     private boolean consensoTrattamentoDati;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CVs> listaCv;
+
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Credenziali credenziali;
+
+
+    public void setCredenziali(Credenziali credenziali) {
+        this.credenziali = credenziali;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public Credenziali getCredenziali() {
+        return credenziali;
+    }
 
     public void setConsensoTrattamentoDati(boolean consensoTrattamentoDati) {
         this.consensoTrattamentoDati = consensoTrattamentoDati;
@@ -43,22 +60,6 @@ public class Users {
 
     public boolean getConsensoTrattamentoDati() {
         return this.consensoTrattamentoDati;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public List<CVs> getListaCv() {
@@ -91,14 +92,6 @@ public class Users {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getTelefono() {

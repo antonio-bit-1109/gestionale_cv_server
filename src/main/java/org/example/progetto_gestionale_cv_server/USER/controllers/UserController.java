@@ -26,8 +26,14 @@ public class UserController {
     @PostMapping("/registration")
     public ResponseEntity<String> registrazione(@Valid @RequestBody RegistrazioneUtenteDTO datiRegistrazione) {
         try {
-            this.userService.registrazioneUtente(datiRegistrazione);
-            return new ResponseEntity<>("utente creato con successo.", HttpStatus.OK);
+            boolean adminCreated = this.userService.registrazioneUtente(datiRegistrazione);
+
+            if (adminCreated) {
+                return new ResponseEntity<>("utente admin creato con successo.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("utente creato con successo.", HttpStatus.OK);
+            }
+
         } catch (RuntimeException e) {
             return new ResponseEntity<>("Errore in fase di registrazione: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

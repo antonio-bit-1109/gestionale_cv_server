@@ -30,9 +30,9 @@ public class CVs {
     private String nome_file_pdf;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String lingueConosciute;
-    @Column(nullable = true)
-    private String profileImage;
-    @Column(nullable = true)
+    //    @Column(nullable = true)
+//    private String profileImage;
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String DescrizioneGenerale;
 
 
@@ -44,13 +44,13 @@ public class CVs {
         return DescrizioneGenerale;
     }
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
+//    public void setProfileImage(String profileImage) {
+//        this.profileImage = profileImage;
+//    }
+//
+//    public String getProfileImage() {
+//        return profileImage;
+//    }
 
     public void setNome_file_pdf(String nome_file_pdf) {
         this.nome_file_pdf = nome_file_pdf;

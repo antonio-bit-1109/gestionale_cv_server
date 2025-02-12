@@ -1,34 +1,38 @@
 package org.example.progetto_gestionale_cv_server.ADMIN.service;
 
-import org.apache.catalina.mapper.Mapper;
+import jakarta.persistence.criteria.Root;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperCv;
-import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.PDFExtractor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 @Service
 public class AdminService implements IAdminService {
 
-    private MapperCv mapperCv;
+    private final MapperCv mapperCv;
+
 
     public AdminService(MapperCv mapperCv) {
         this.mapperCv = mapperCv;
+
     }
+
 
     // metodo per salvare un .pdf su file system non collegato a uno user
     @Override
-    public void savePDForfano(MultipartFile file) throws IOException {
+    public void savePDForfano(MultipartFile file, HashMap<String, String> mappaParti) throws IOException {
 
-        String RootPath = Paths.get("").toAbsolutePath().toString()
+        String PercorsoSuServer = Paths.get("").toAbsolutePath().toString()
                 + "/src/main/resources/static/notLinkedCv";
-        Path uploadPath = Paths.get(RootPath);
+        Path uploadPath = Paths.get(PercorsoSuServer);
 
         // crea la directory se non esiste
         if (!Files.exists(uploadPath)) {
@@ -38,17 +42,15 @@ public class AdminService implements IAdminService {
         // Ottieni il filepath
         Path filePath = uploadPath.resolve(Objects.requireNonNull(file.getOriginalFilename()));
 
-        // se il file path inizia come mi aspetto ovvero "cv vitae di ...nome cognome"
-        // allora carico il file, altrimenti lancio errore
+        // carico il file su server
         Files.write(filePath, file.getBytes());
 
-        String extractedText = PDFExtractor.extractTextFromPDF(filePath.toString());
-        this.checkDocumentTitle(extractedText);
-
-
-        // SALVA NUOVO CV SENZA RIFERIMENTO ALL UTENTE
-        this.ExtractDataFromPDF(extractedText);
+        // creo un record cv "orfano" sul db
+        // per far questo richiamo nel metodo il file per prendere il nome con cui questo è stato caricato
+        // e il rootPath per creare il percorso completo del file da salvare nel record su db
+        this.mapperCv.createCv(mappaParti, file, PercorsoSuServer);
     }
+
 
     private void checkDocumentTitle(String extractedText) {
 

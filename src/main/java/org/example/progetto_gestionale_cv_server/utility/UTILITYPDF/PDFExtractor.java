@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class PDFExtractor {
 
+    // metodo della libreria pdfbox per estrarre il contenuto di un file pdf in formato stringa
+    // ATTUALMENTE NON UTILIZZATO
     @Bean
     public static String extractTextFromPDF(String filePath) throws IOException {
         try (PDDocument document = PDDocument.load(new File(filePath))) {
