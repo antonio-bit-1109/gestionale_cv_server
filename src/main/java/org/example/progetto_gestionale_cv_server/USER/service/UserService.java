@@ -44,7 +44,7 @@ public class UserService implements IUserService {
     }
 
     // mappa dto a utente e credenziali e li salva nel db
-    private boolean MapUtenteToEntity(RegistrazioneUtenteDTO datiUtente, boolean isAdmin) {
+    public boolean MapUtenteToEntity(RegistrazioneUtenteDTO datiUtente, boolean isAdmin) {
         return this.mapperUser.FromDTOToEntity(datiUtente, isAdmin);
 
     }
@@ -52,7 +52,6 @@ public class UserService implements IUserService {
     @Override
     public String doLogin(LoginDTO datiLogin) throws RuntimeException {
 
-//        Optional<Users> utenteOptional = this.userRepository.findByEmail(datiLogin.getEmail());
         Optional<Credenziali> credenzialiOptional = this.credenzialiRepository.findByEmail(datiLogin.getEmail());
 
         if (credenzialiOptional.isEmpty()) {
