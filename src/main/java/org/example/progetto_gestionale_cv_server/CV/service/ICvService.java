@@ -9,11 +9,12 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ICvService {
-    void creaPDF_Record_CV(DatiCreazionePDF_DTO datiCreazionePDFDto) throws IOException;
 
-    void modificaPDF_Record_CV(DatiModifica_cv_DTO datiModificaPDF) throws IOException;
+    boolean creaPDF_Record_CV(DatiCreazionePDF_DTO datiCreazionePDFDto) throws IOException;
 
-    void CancellaCV(ID_UTENTE_CV_DTO ids_utente_cv) throws IOException;
+    boolean modificaPDF_Record_CV(DatiModifica_cv_DTO datiModificaPDF) throws IOException;
+
+    boolean CancellaCV(ID_UTENTE_CV_DTO ids_utente_cv) throws IOException;
 
     BaseDTO getCv(ID_UTENTE_CV_DTO dati_id);
 

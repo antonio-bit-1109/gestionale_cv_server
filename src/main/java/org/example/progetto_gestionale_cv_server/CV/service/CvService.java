@@ -35,7 +35,7 @@ public class CvService implements ICvService {
 
     //metodo di creazione del pdf e popolamento tabella cv
     @Override
-    public void creaPDF_Record_CV(DatiCreazionePDF_DTO datiCreazionePDFDto) throws RuntimeException, IOException {
+    public boolean creaPDF_Record_CV(DatiCreazionePDF_DTO datiCreazionePDFDto) throws RuntimeException, IOException {
 
         CVs cv = this.mapperCv.FromDTOToEntity(datiCreazionePDFDto);
         Users utente = returnUserIfExist(datiCreazionePDFDto.getIdUtente());
@@ -47,47 +47,30 @@ public class CvService implements ICvService {
         this.userRepository.save(utente);
 
         this.generazionePDF.CreazionePDFFileSystem(utente, cvSaved, false);
-
+        return true;
     }
 
 
     // metodo che dovrà modificare i campi cv della tabella e sostituire il pdf con i dati aggiornati.
     @Override
-    public void modificaPDF_Record_CV(DatiModifica_cv_DTO datiModificaPDF) throws IOException {
+    public boolean modificaPDF_Record_CV(DatiModifica_cv_DTO datiModificaPDF) throws IOException {
         Users user = returnUserIfExist(datiModificaPDF.getIdUtente());
         this.mapperCv.ModificaCv(datiModificaPDF, user);
+        return true;
     }
 
     @Transactional
     @Override
-    public void CancellaCV(ID_UTENTE_CV_DTO ids_utente_cv) throws IOException {
-
+    public boolean CancellaCV(ID_UTENTE_CV_DTO ids_utente_cv) throws IOException {
 
         CVs cv = this.returnCvIfExist(ids_utente_cv.getId_cv());
 
         if (cv.getUser().getId().equals(ids_utente_cv.getId_utente())) {
             this.cvRepository.delete(cv);
-
+            return true;
         } else {
             throw new RuntimeException("l'utente che sta cercando di eliminare questo cv non è il proprietario del cv.");
         }
-
-//        Users utente = this.returnUserIfExist(ids_utente_cv.getId_utente());
-//        utente.getListaCv().forEach(cVs -> {
-//
-//            if (cVs.getId().equals(cv.getId())) {
-//                try {
-//                    this.generazionePDF.CancellaPDF_file_System(cv.getNome_file_pdf());
-//                } catch (IOException e) {
-//                    throw new RuntimeException("errore durante la cancellazione dal file system del file pdf:" + e.getMessage());
-//                }
-//                this.cvRepository.delete(cv);
-//
-//            } else {
-//                throw new RuntimeException("nessun cv trovato da cancellare.");
-//            }
-//        });
-
 
     }
 

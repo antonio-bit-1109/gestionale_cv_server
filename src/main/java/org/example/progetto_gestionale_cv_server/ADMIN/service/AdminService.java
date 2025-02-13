@@ -28,7 +28,7 @@ public class AdminService implements IAdminService {
 
     // metodo per salvare un .pdf su file system non collegato a uno user
     @Override
-    public void savePDForfano(MultipartFile file, HashMap<String, String> mappaParti) throws IOException {
+    public boolean savePDForfano(MultipartFile file, HashMap<String, String> mappaParti) throws IOException {
 
         String PercorsoSuServer = Paths.get("").toAbsolutePath().toString()
                 + "/src/main/resources/static/notLinkedCv";
@@ -49,6 +49,7 @@ public class AdminService implements IAdminService {
         // per far questo richiamo nel metodo il file per prendere il nome con cui questo è stato caricato
         // e il rootPath per creare il percorso completo del file da salvare nel record su db
         this.mapperCv.createCv(mappaParti, file, PercorsoSuServer);
+        return true;
     }
 
 
