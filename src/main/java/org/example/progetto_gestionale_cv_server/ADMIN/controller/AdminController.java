@@ -1,6 +1,7 @@
 package org.example.progetto_gestionale_cv_server.ADMIN.controller;
 
 import jakarta.persistence.criteria.Root;
+import jakarta.validation.constraints.NotNull;
 import org.example.progetto_gestionale_cv_server.ADMIN.service.AdminService;
 import org.example.progetto_gestionale_cv_server.ADMIN.service.IAdminService;
 import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.PDFExtractor;
@@ -25,16 +26,16 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @PostMapping("/assignment-cv")
+    @PostMapping("/assignment")
     public ResponseEntity<String> caricaCvPdf(
-            @RequestParam("file") MultipartFile file,
-            @RequestPart("id_utente") String id_utente,
-            @RequestPart("titolo") String titolo,
-            @RequestPart("competenze") String competenze,
-            @RequestPart("descrizione_generale") String descrizione_generale,
-            @RequestPart("esperienze_precedenti") String esperienze_precedenti,
-            @RequestPart("istruzione") String istruzione,
-            @RequestPart("lingue_conosciute") String lingue_conosciute
+            @NotNull @RequestParam("file") MultipartFile file,
+            @NotNull @RequestPart("id_utente") String id_utente,
+            @NotNull @RequestPart("titolo") String titolo,
+            @NotNull @RequestPart("competenze") String competenze,
+            @NotNull @RequestPart("descrizione_generale") String descrizione_generale,
+            @NotNull @RequestPart("esperienze_precedenti") String esperienze_precedenti,
+            @NotNull @RequestPart("istruzione") String istruzione,
+            @NotNull @RequestPart("lingue_conosciute") String lingue_conosciute
     ) {
 
         if (file.isEmpty()) {

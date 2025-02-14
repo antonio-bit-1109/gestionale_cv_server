@@ -152,4 +152,9 @@ public class UserServiceTest {
         boolean result = this.userService.registrazioneUtente(registrazioneMock);
         assertFalse(result);
     }
+
+    @Test
+    void QuandoUtenteCaricaNuovaImgProfiloTornaTrue() {
+
+    }
 }

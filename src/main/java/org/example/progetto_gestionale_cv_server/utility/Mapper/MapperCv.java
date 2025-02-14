@@ -6,7 +6,10 @@ import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiModifica_cv_DTO
 import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Cv_get_DTO;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
+import org.example.progetto_gestionale_cv_server.CV.service.CvService;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
+import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
+import org.example.progetto_gestionale_cv_server.USER.service.UserService;
 import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.GenerazionePDF;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,17 +18,24 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Component
 public class MapperCv {
 
     private final CvRepository cvRepository;
     private final GenerazionePDF generazionePDF;
+    private final UserService userService;
+    private final UserRepository userRepository;
+
 
     //costr
-    public MapperCv(CvRepository cvRepository, GenerazionePDF generazionePDF) {
+    public MapperCv(CvRepository cvRepository, GenerazionePDF generazionePDF, UserService userService, UserRepository userRepository) {
         this.cvRepository = cvRepository;
         this.generazionePDF = generazionePDF;
+        this.userService = userService;
+        this.userRepository = userRepository;
+
     }
 
     public CVs FromDTOToEntity(DatiCreazionePDF_DTO datiPdf) {
@@ -64,46 +74,47 @@ public class MapperCv {
         LocalDateTime dataCorrente = LocalDateTime.now();
         Timestamp oraCorrente = Timestamp.valueOf(dataCorrente);
 
-        for (CVs cv : users.getListaCv()) {
+//        CVs cv = this.cvService.returnCvIfExist(datipdf.getIdCv());
+        Optional<CVs> cVsOptional = this.cvRepository.findById(datipdf.getIdCv());
 
-            if (!(cv.getUser().getId().equals(datipdf.getIdUtente()))) {
-                throw new RuntimeException("L'utente che sta cercando di modificare il curriculum non è il possessore del curriculum");
-            }
-
-            if (!cv.getId().equals(datipdf.getIdCv())) {
-                continue;
-            }
-
-
-            cv.setUpdated_at(oraCorrente);
-
-            if (!(datipdf.getCompetenze().equalsIgnoreCase(cv.getCompetenze()))) {
-                cv.setCompetenze(datipdf.getCompetenze());
-            }
-
-            if (!(datipdf.getIstruzione().equalsIgnoreCase(cv.getIstruzione()))) {
-                cv.setIstruzione(datipdf.getIstruzione());
-            }
-
-            if (!(datipdf.getTitolo().equalsIgnoreCase(cv.getTitolo()))) {
-                cv.setTitolo(datipdf.getTitolo());
-            }
-
-            if (!(datipdf.getDescrizioneGenerale().equalsIgnoreCase(cv.getDescrizioneGenerale()))) {
-                cv.setDescrizioneGenerale(datipdf.getDescrizioneGenerale());
-            }
-
-            if (!(datipdf.getLingueConosciute().equalsIgnoreCase(cv.getLingueConosciute()))) {
-                cv.setLingueConosciute(datipdf.getLingueConosciute());
-            }
-
-            if (!(datipdf.getEsperienzePrecedenti().equalsIgnoreCase(cv.getEsperienze_Precedenti()))) {
-                cv.setEsperienze_Precedenti(datipdf.getEsperienzePrecedenti());
-            }
-
-            this.generazionePDF.CreazionePDFFileSystem(users, cv, true);
+        if (cVsOptional.isEmpty()) {
+            throw new RuntimeException("il cv selezionato non esiste.");
         }
 
+        CVs cv = cVsOptional.get();
+
+        if (!(cv.getUser().getId().equals(datipdf.getIdUtente()))) {
+            throw new RuntimeException("L'utente che sta cercando di modificare il curriculum non è il possessore del curriculum");
+        }
+
+        cv.setUpdated_at(oraCorrente);
+
+        if (!(datipdf.getCompetenze().equalsIgnoreCase(cv.getCompetenze()))) {
+            cv.setCompetenze(datipdf.getCompetenze());
+        }
+
+        if (!(datipdf.getIstruzione().equalsIgnoreCase(cv.getIstruzione()))) {
+            cv.setIstruzione(datipdf.getIstruzione());
+        }
+
+        if (!(datipdf.getTitolo().equalsIgnoreCase(cv.getTitolo()))) {
+            cv.setTitolo(datipdf.getTitolo());
+        }
+
+        if (!(datipdf.getDescrizioneGenerale().equalsIgnoreCase(cv.getDescrizioneGenerale()))) {
+            cv.setDescrizioneGenerale(datipdf.getDescrizioneGenerale());
+        }
+
+        if (!(datipdf.getLingueConosciute().equalsIgnoreCase(cv.getLingueConosciute()))) {
+            cv.setLingueConosciute(datipdf.getLingueConosciute());
+        }
+
+        if (!(datipdf.getEsperienzePrecedenti().equalsIgnoreCase(cv.getEsperienze_Precedenti()))) {
+            cv.setEsperienze_Precedenti(datipdf.getEsperienzePrecedenti());
+        }
+
+        this.generazionePDF.CreazionePDFFileSystem(users, cv, true);
+        
     }
 
     public void createCv(HashMap<String, String> mappaParti, MultipartFile file, String percorsoFileSuServer) {
@@ -120,6 +131,12 @@ public class MapperCv {
         cv.setEsperienze_Precedenti(mappaParti.get("esperienze_precedenti"));
         cv.setCompetenze(mappaParti.get("competenze"));
         cv.setDescrizioneGenerale(mappaParti.get("descrizione_generale"));
+
+        Users utente = this.userService.returnUserIfExist(Long.parseLong(mappaParti.get("id_utente")));
+        utente.getListaCv().add(cv);
+        cv.setUser(utente);
+
         this.cvRepository.save(cv);
+        this.userRepository.save(utente);
     }
 }

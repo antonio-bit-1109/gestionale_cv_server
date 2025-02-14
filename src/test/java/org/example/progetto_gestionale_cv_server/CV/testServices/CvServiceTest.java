@@ -12,6 +12,7 @@ import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.CV.service.CvService;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
+import org.example.progetto_gestionale_cv_server.USER.service.UserService;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperCv;
 import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.GenerazionePDF;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +49,9 @@ public class CvServiceTest {
     @Mock
     private GenerazionePDF generazionePDF;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private CvService cvService;
 
@@ -69,7 +73,7 @@ public class CvServiceTest {
         userMock.setListaCv(listaCv);
 
 
-        when(this.userRepository.findById(userId)).thenReturn(Optional.of(userMock));
+        when(this.userService.returnUserIfExist(userId)).thenReturn((userMock));
         when(this.mapperCv.fromEntityToDTO(cv)).thenReturn(mockDto);
 
         List<BaseDTO> result = this.cvService.getAll_CV(userId);
@@ -100,7 +104,7 @@ public class CvServiceTest {
         userMock.setListaCv(listaCv);
 
 
-        when(this.userRepository.findById(mock_id_user_cv.getId_utente())).thenReturn(Optional.of(userMock));
+        when(this.userService.returnUserIfExist(mock_id_user_cv.getId_utente())).thenReturn((userMock));
         when(this.mapperCv.fromEntityToDTO(cv)).thenReturn(mockDto);
 
         BaseDTO result = this.cvService.getCv(mock_id_user_cv);
@@ -139,7 +143,7 @@ public class CvServiceTest {
         CVs cv_mock = new CVs();
 
         when(this.mapperCv.FromDTOToEntity(mockReq)).thenReturn(cv_mock);
-        when(this.userRepository.findById(userMock.getId())).thenReturn(Optional.of(userMock));
+        when(this.userService.returnUserIfExist(userMock.getId())).thenReturn((userMock));
         when(this.cvRepository.save(cv_mock)).thenReturn(cv_mock);
         when(this.userRepository.save(userMock)).thenReturn(new Users()); // Corrected this line
         doNothing().when(this.generazionePDF).CreazionePDFFileSystem(userMock, cv_mock, false);
@@ -157,7 +161,7 @@ public class CvServiceTest {
 
         Users utenteMock = new Users();
 
-        when(this.userRepository.findById(mockDatiModifica.getIdUtente())).thenReturn(Optional.of(utenteMock));
+        when(this.userService.returnUserIfExist(mockDatiModifica.getIdUtente())).thenReturn((utenteMock));
         doNothing().when(this.mapperCv).ModificaCv(mockDatiModifica, utenteMock);
 
         boolean result = this.cvService.modificaPDF_Record_CV(mockDatiModifica);

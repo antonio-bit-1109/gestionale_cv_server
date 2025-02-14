@@ -1,6 +1,9 @@
 package org.example.progetto_gestionale_cv_server.USER.controllers;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import org.apache.coyote.Response;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.CambioImgProfilo_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.service.IUserService;
@@ -8,10 +11,11 @@ import org.example.progetto_gestionale_cv_server.USER.service.UserService;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.TokenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -47,6 +51,23 @@ public class UserController {
         } catch (RuntimeException ex) {
 
             return new ResponseEntity<>(new TokenResponse(null, "errore in fase di login:" + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/upload/photo")
+    public ResponseEntity<String> caricamentoNuovaImgProfilo(
+            @NotNull @RequestParam("file") MultipartFile file,
+            @NotNull @RequestPart("id_utente") String id_utente) {
+        try {
+
+            Long idUser = Long.parseLong(id_utente);
+
+            this.userService.cambioImgProfilo(file, idUser);
+            return new ResponseEntity<>("immagine del profilo caricata con successo.", HttpStatus.OK);
+
+        } catch (RuntimeException | IOException ex) {
+            return new ResponseEntity<>("Errore durante il caricamento dell'immagine:" + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 }

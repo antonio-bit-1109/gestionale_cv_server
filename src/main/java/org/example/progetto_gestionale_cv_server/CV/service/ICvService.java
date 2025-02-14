@@ -4,6 +4,7 @@ import org.example.progetto_gestionale_cv_server.CV.DTOs.BaseDTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiModifica_cv_DTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.ID_UTENTE_CV_DTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiCreazionePDF_DTO;
+import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,4 +20,7 @@ public interface ICvService {
     BaseDTO getCv(ID_UTENTE_CV_DTO dati_id);
 
     List<BaseDTO> getAll_CV(Long id_utente);
+
+    CVs returnCvIfExist(Long id_cv);
+
 }

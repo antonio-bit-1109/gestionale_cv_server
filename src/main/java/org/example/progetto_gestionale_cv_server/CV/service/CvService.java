@@ -8,6 +8,7 @@ import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
 import org.example.progetto_gestionale_cv_server.CV.repository.CvRepository;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
+import org.example.progetto_gestionale_cv_server.USER.service.UserService;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperCv;
 import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.GenerazionePDF;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,14 @@ public class CvService implements ICvService {
     private final UserRepository userRepository;
     private final MapperCv mapperCv;
     private final GenerazionePDF generazionePDF;
+    private final UserService userService;
 
-    public CvService(CvRepository cvRepo, UserRepository userRepository, MapperCv mapperCv, GenerazionePDF generazionePDF) {
+    public CvService(CvRepository cvRepo, UserRepository userRepository, MapperCv mapperCv, GenerazionePDF generazionePDF, UserService userService) {
         this.cvRepository = cvRepo;
         this.userRepository = userRepository;
         this.mapperCv = mapperCv;
         this.generazionePDF = generazionePDF;
+        this.userService = userService;
     }
 
     //metodo di creazione del pdf e popolamento tabella cv
@@ -38,7 +41,7 @@ public class CvService implements ICvService {
     public boolean creaPDF_Record_CV(DatiCreazionePDF_DTO datiCreazionePDFDto) throws RuntimeException, IOException {
 
         CVs cv = this.mapperCv.FromDTOToEntity(datiCreazionePDFDto);
-        Users utente = returnUserIfExist(datiCreazionePDFDto.getIdUtente());
+        Users utente = this.userService.returnUserIfExist(datiCreazionePDFDto.getIdUtente());
 
 
         cv.setUser(utente); // Set the user before saving the CV
@@ -54,7 +57,7 @@ public class CvService implements ICvService {
     // metodo che dovrà modificare i campi cv della tabella e sostituire il pdf con i dati aggiornati.
     @Override
     public boolean modificaPDF_Record_CV(DatiModifica_cv_DTO datiModificaPDF) throws IOException {
-        Users user = returnUserIfExist(datiModificaPDF.getIdUtente());
+        Users user = this.userService.returnUserIfExist(datiModificaPDF.getIdUtente());
         this.mapperCv.ModificaCv(datiModificaPDF, user);
         return true;
     }
@@ -76,7 +79,7 @@ public class CvService implements ICvService {
 
     @Override
     public BaseDTO getCv(ID_UTENTE_CV_DTO dati_id) {
-        Users utente = this.returnUserIfExist(dati_id.getId_utente());
+        Users utente = this.userService.returnUserIfExist(dati_id.getId_utente());
 
         for (CVs cV : utente.getListaCv()) {
             if (cV.getId().equals(dati_id.getId_cv())) {
@@ -90,7 +93,7 @@ public class CvService implements ICvService {
 
     @Override
     public List<BaseDTO> getAll_CV(Long id_utente) {
-        Users user = this.returnUserIfExist(id_utente);
+        Users user = this.userService.returnUserIfExist(id_utente);
 
         List<BaseDTO> listaCV = new ArrayList<>();
 
@@ -103,21 +106,9 @@ public class CvService implements ICvService {
     }
 
 
-    //privato
-    // ritornare lo user, se esiste, come una entity
-    private Users returnUserIfExist(Long id_utente) throws RuntimeException {
-        Optional<Users> utenteOpt = this.userRepository.findById(id_utente);
-
-        if (utenteOpt.isEmpty()) {
-            throw new RuntimeException("L'utente non esiste.");
-        }
-
-        return utenteOpt.get();
-    }
-
-
+    @Override
     // metodo che ritorna un cv se esiste altrimenti lancia errore
-    private CVs returnCvIfExist(Long id_cv) {
+    public CVs returnCvIfExist(Long id_cv) {
         Optional<CVs> cvOpt = this.cvRepository.findById(id_cv);
 
         if (cvOpt.isEmpty()) {

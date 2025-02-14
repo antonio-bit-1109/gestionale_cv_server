@@ -3,6 +3,7 @@ package org.example.progetto_gestionale_cv_server.USER.service;
 import org.apache.catalina.User;
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.entity.Credenziali;
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.repository.CredenzialiRepository;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.CambioImgProfilo_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -10,9 +11,19 @@ import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperUser;
 import org.example.progetto_gestionale_cv_server.utility.generateToken.GenerateToken;
 import org.springframework.stereotype.Service;
+import org.springframework.util.PathMatcher;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 
 @Service
 public class UserService implements IUserService {
@@ -21,12 +32,14 @@ public class UserService implements IUserService {
     private final CredenzialiRepository credenzialiRepository;
     private final MapperUser mapperUser;
     private final GenerateToken generateToken;
+    private final PathMatcher pathMatcher;
 
-    public UserService(UserRepository userRepo, MapperUser mapperuser, GenerateToken generateToken, CredenzialiRepository credenzialiRepository) {
+    public UserService(UserRepository userRepo, MapperUser mapperuser, GenerateToken generateToken, CredenzialiRepository credenzialiRepository, PathMatcher pathMatcher) {
         this.userRepository = userRepo;
         this.mapperUser = mapperuser;
         this.generateToken = generateToken;
         this.credenzialiRepository = credenzialiRepository;
+        this.pathMatcher = pathMatcher;
     }
 
 
@@ -42,6 +55,24 @@ public class UserService implements IUserService {
         }
 
     }
+
+    @Override
+    public boolean cambioImgProfilo(MultipartFile fileImg, Long idUser) throws IOException {
+        Users utente = this.returnUserIfExist(idUser);
+
+        Path destinazioneSalvataggioFoto = Paths.get("").toAbsolutePath().resolve("src/main/resources/static/images");
+
+        try {
+            Path filePath = destinazioneSalvataggioFoto.resolve(Objects.requireNonNull(fileImg.getOriginalFilename()));
+            Files.copy(fileImg.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            utente.setProfileImage(filePath.toString());
+            this.userRepository.save(utente);
+            return true;
+        } catch (IOException ex) {
+            throw new IOException("errore durante il caricamento dell'imagine profilo:" + ex.getMessage());
+        }
+    }
+
 
     // mappa dto a utente e credenziali e li salva nel db
     public boolean MapUtenteToEntity(RegistrazioneUtenteDTO datiUtente, boolean isAdmin) {
@@ -64,5 +95,17 @@ public class UserService implements IUserService {
 
         Users utenteAssociato = credenzialiUtente.getUser();
         return this.generateToken.tokenGeneration(utenteAssociato);
+    }
+
+    //privato
+    // ritornare lo user, se esiste, come una entity
+    public Users returnUserIfExist(Long id_utente) throws RuntimeException {
+        Optional<Users> utenteOpt = this.userRepository.findById(id_utente);
+
+        if (utenteOpt.isEmpty()) {
+            throw new RuntimeException("L'utente non esiste.");
+        }
+
+        return utenteOpt.get();
     }
 }
