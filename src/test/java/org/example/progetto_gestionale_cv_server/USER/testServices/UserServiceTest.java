@@ -17,9 +17,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -154,7 +157,21 @@ public class UserServiceTest {
     }
 
     @Test
-    void QuandoUtenteCaricaNuovaImgProfiloTornaTrue() {
+    void QuandoUtenteCaricaNuovaImgProfiloTornaTrue() throws IOException {
 
+        MultipartFile mockFile = new MockMultipartFile(
+                "file", // name of the file
+                "test.jpg", // original filename
+                "image/jpeg", // content type
+                "test image content".getBytes() // file content
+        );
+
+        Users utente = new Users();
+
+        when(this.userRepository.findById(1L)).thenReturn(Optional.of(utente));
+        when(this.userRepository.save(utente)).thenReturn(utente);
+
+        boolean result = this.userService.cambioImgProfilo(mockFile, 1L);
+        assertTrue(result);
     }
 }

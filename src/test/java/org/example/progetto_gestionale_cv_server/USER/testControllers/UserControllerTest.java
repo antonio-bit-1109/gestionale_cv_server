@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserTestControllers {
+public class UserControllerTest {
 
     @Mock
     private UserService userService;
@@ -92,6 +92,6 @@ public class UserTestControllers {
 
         assertEquals(Objects.requireNonNull(response.getBody()).getToken(), mockResp.getToken());
         assertNull(response.getBody().getToken());
-        
+
     }
 }

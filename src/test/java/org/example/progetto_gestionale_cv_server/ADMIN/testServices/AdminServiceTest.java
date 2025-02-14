@@ -38,38 +38,5 @@ public class AdminServiceTest {
 
     @InjectMocks
     AdminService adminService;
-
-//    @BeforeAll
-//    static void deleteFilesInDirectory() throws IOException {
-//        String PercorsoSuServer = Paths.get("").toAbsolutePath().toString()
-//                + "/src/main/resources/static/notLinkedCv";
-//        Path uploadPath = Paths.get(PercorsoSuServer);
-//
-//        // crea la directory se non esiste
-//        if (Files.exists(uploadPath)) {
-//            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(uploadPath)) {
-//                for (Path path : directoryStream) {
-//                    Files.delete(path);
-//                }
-//            }
-//        }
-//    }
-
-//    @Test
-//    void quandoSalvoUnRecordCvOrfanoRitornaTrue() throws IOException {
-//        CVs cv = new CVs();
-//        HashMap<String, String> mappa = new HashMap<>();
-//        MultipartFile file = new MockMultipartFile(
-//                "file", // nome del parametro
-//                "test.pdf", // nome del file
-//                "application/pdf", // tipo di contenuto
-//                "Questo è il contenuto del file".getBytes() // contenuto del file
-//        );
-//
-//        doNothing().when(this.mapperCv).createCv(mappa, file, "percorso su server Mock");
-//        when(this.cvRepository.save(cv)).thenReturn(cv);
-//
-//        boolean result = this.adminService.savePDForfano(file, mappa);
-//        assertTrue(result);
-//    }
+    
 }

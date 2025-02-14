@@ -1,7 +1,8 @@
 -[x] fai delete cv e relativo curriculum
 -[x] get singolo cv
- -[] get tutti cv
-- [] upload foto utente
-- [] usa pdfextractor per prendere lo stream di dati presenti nel pdf stringhizzato e usarli per popolare la tabella cv
+-[x] get tutti cv
+- [x] upload foto utente
   il campo id user sarà vuoto.
-- [] inviare al controller , oltre al file pdf anche i dati del candidato tramite form data 
+- [x] inviare al controller , oltre al file pdf anche i dati del candidato tramite form data
+- [] finire i test sui controller
+- [] implementare autenticazione tramite ruoli
