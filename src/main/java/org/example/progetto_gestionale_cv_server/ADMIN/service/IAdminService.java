@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface IAdminService {
     // metodo per salvare un .pdf su file system non collegato a uno user
-    boolean savePDForfano(MultipartFile file, HashMap<String, String> mappaParti) throws IOException;
+    boolean savePDFeAssegna(MultipartFile file, HashMap<String, String> mappaParti) throws IOException;
 
 }

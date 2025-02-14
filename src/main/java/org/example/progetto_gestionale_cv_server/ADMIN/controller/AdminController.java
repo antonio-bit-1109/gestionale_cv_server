@@ -25,9 +25,10 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/assignment-cv")
     public ResponseEntity<String> caricaCvPdf(
             @RequestParam("file") MultipartFile file,
+            @RequestPart("id_utente") String id_utente,
             @RequestPart("titolo") String titolo,
             @RequestPart("competenze") String competenze,
             @RequestPart("descrizione_generale") String descrizione_generale,
@@ -43,6 +44,7 @@ public class AdminController {
         try {
 
             HashMap<String, String> mappaParti = new HashMap<>();
+            mappaParti.put("id_utente", id_utente);
             mappaParti.put("titolo", titolo);
             mappaParti.put("competenze", competenze);
             mappaParti.put("descrizione_generale", descrizione_generale);
@@ -50,7 +52,7 @@ public class AdminController {
             mappaParti.put("istruzione", istruzione);
             mappaParti.put("lingue_conosciute", lingue_conosciute);
 
-            this.adminService.savePDForfano(file, mappaParti);
+            this.adminService.savePDFeAssegna(file, mappaParti);
             return new ResponseEntity<>("file pdf salvato con successo", HttpStatus.OK);
 
         } catch (RuntimeException | IOException e) {

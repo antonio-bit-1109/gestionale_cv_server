@@ -28,10 +28,10 @@ public class AdminService implements IAdminService {
 
     // metodo per salvare un .pdf su file system non collegato a uno user
     @Override
-    public boolean savePDForfano(MultipartFile file, HashMap<String, String> mappaParti) throws IOException {
+    public boolean savePDFeAssegna(MultipartFile file, HashMap<String, String> mappaParti) throws IOException {
 
         String PercorsoSuServer = Paths.get("").toAbsolutePath().toString()
-                + "/src/main/resources/static/notLinkedCv";
+                + "/src/main/resources/static/LoadedFromAdmin";
         Path uploadPath = Paths.get(PercorsoSuServer);
 
         // crea la directory se non esiste
