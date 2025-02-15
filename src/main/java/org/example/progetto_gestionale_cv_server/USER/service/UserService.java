@@ -6,6 +6,7 @@ import org.example.progetto_gestionale_cv_server.CREDENZIALI.repository.Credenzi
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.CambioImgProfilo_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_Utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperUser;
@@ -107,5 +108,29 @@ public class UserService implements IUserService {
         }
 
         return utenteOpt.get();
+    }
+
+    public Credenziali returnCredenzialiIfExists(Users utente) {
+
+        String email = utente.getCredenziali().getEmail();
+
+        if (email == null) {
+            throw new NullPointerException("nessuna mail disponibile per l'utente selezionato.");
+        }
+
+        Optional<Credenziali> credenzialiOpt = this.credenzialiRepository.findByEmail(email);
+
+        if (credenzialiOpt.isEmpty()) {
+            throw new RuntimeException("impossibile ricavare le credenziali per l'email fornita.");
+        }
+
+        return credenzialiOpt.get();
+    }
+
+    @Override
+    public Get_Utente_DTO GetUtenteSingolo(Long id_utente) {
+        Users utente = this.returnUserIfExist(id_utente);
+        Credenziali credenzialiUtente = this.returnCredenzialiIfExists(utente);
+        return this.mapperUser.FromEntityToDTO_get_user(utente, credenzialiUtente);
     }
 }

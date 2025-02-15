@@ -3,6 +3,7 @@ package org.example.progetto_gestionale_cv_server.utility.Mapper;
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.entity.Credenziali;
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.repository.CredenzialiRepository;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_Utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,6 +54,21 @@ public class MapperUser {
         this.credenzialiRepository.save(credenziali);
 
         return creatingAdmin;
+
+    }
+
+    public Get_Utente_DTO FromEntityToDTO_get_user(Users utente, Credenziali credenzialiUtente) {
+        Get_Utente_DTO utenteDto = new Get_Utente_DTO();
+
+        utenteDto.setCognome(utente.getCognome());
+        utenteDto.setNome(utente.getNome());
+        utenteDto.setEmail(credenzialiUtente.getEmail());
+        utenteDto.setImgProfilo(utente.getProfileImage());
+        utenteDto.setTelefono(utente.getTelefono());
+        utenteDto.setRuolo(credenzialiUtente.getRole());
+        utenteDto.setId_utente(utente.getId());
+
+        return utenteDto;
 
     }
 

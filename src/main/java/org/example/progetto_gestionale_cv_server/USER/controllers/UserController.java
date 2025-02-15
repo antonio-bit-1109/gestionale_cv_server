@@ -6,6 +6,8 @@ import org.apache.coyote.Response;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.CambioImgProfilo_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_Utente_DTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Resp_get_utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.service.IUserService;
 import org.example.progetto_gestionale_cv_server.USER.service.UserService;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.TokenResponse;
@@ -70,4 +72,52 @@ public class UserController {
 
         }
     }
+
+    // endpoint per reperire dati utente
+    @GetMapping("/get/{id_utente}")
+    public ResponseEntity<Resp_get_utente_DTO> getUtente(@NotNull @PathVariable Long id_utente) {
+        try {
+
+            Get_Utente_DTO utenteDTO = this.userService.GetUtenteSingolo(id_utente);
+            return new ResponseEntity<>(new Resp_get_utente_DTO(null, utenteDTO), HttpStatus.OK);
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>(new Resp_get_utente_DTO("Errore durante il reperimento dell'utente selezionato: " + ex.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // endpoint che fare get di tutti utenti
+//    @GetMapping("/get/all")
+//    public ResponseEntity<> getAllUtenti(){
+//        try {
+//
+//
+//        } catch (RuntimeException ex) {
+//
+//        }
+//    }
+//
+//
+////    Endpoint per la modifica di un particolare utente
+//    @PostMapping("/edit")
+//    public ResponseEntity<> modificaUtente(){
+//        try {
+//
+//
+//        } catch (RuntimeException ex) {
+//
+//        }
+//    }
+//
+//
+//    // soft delete utente, campo isActive false;
+//    @PostMapping("/edit")
+//    public ResponseEntity<> SoftDeleteUtente(){
+//        try {
+//
+//
+//        } catch (RuntimeException ex) {
+//
+//        }
+//    }
+//
 }
