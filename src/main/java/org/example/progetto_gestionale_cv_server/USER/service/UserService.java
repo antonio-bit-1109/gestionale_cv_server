@@ -6,6 +6,7 @@ import org.example.progetto_gestionale_cv_server.CREDENZIALI.repository.Credenzi
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.CambioImgProfilo_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_List_utenti_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_Utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
@@ -20,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -110,6 +112,10 @@ public class UserService implements IUserService {
         return utenteOpt.get();
     }
 
+    private List<Users> returnAllUsers() {
+        return this.userRepository.findAll();
+    }
+
     public Credenziali returnCredenzialiIfExists(Users utente) {
 
         String email = utente.getCredenziali().getEmail();
@@ -132,5 +138,19 @@ public class UserService implements IUserService {
         Users utente = this.returnUserIfExist(id_utente);
         Credenziali credenzialiUtente = this.returnCredenzialiIfExists(utente);
         return this.mapperUser.FromEntityToDTO_get_user(utente, credenzialiUtente);
+    }
+
+    @Override
+    public List<Get_Utente_DTO> getListaUtenti() {
+
+        List<Get_Utente_DTO> listaUtenti = new ArrayList<>();
+
+        this.returnAllUsers().forEach(users -> {
+
+            Credenziali credenzialiUtente = this.returnCredenzialiIfExists(users);
+            Get_Utente_DTO utenteDto = this.mapperUser.FromEntityToDTO_get_user(users, credenzialiUtente);
+            listaUtenti.add(utenteDto);
+        });
+        return listaUtenti;
     }
 }

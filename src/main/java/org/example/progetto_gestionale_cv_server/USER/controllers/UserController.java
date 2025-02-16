@@ -6,6 +6,7 @@ import org.apache.coyote.Response;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.CambioImgProfilo_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_List_utenti_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_Utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Resp_get_utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.service.IUserService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -86,15 +88,17 @@ public class UserController {
     }
 
     // endpoint che fare get di tutti utenti
-//    @GetMapping("/get/all")
-//    public ResponseEntity<> getAllUtenti(){
-//        try {
-//
-//
-//        } catch (RuntimeException ex) {
-//
-//        }
-//    }
+    @GetMapping("/get/all")
+    public ResponseEntity<Get_List_utenti_DTO> getAllUtenti() {
+        try {
+
+            List<Get_Utente_DTO> listaUtenti = this.userService.getListaUtenti();
+            return new ResponseEntity<>(new Get_List_utenti_DTO(null, listaUtenti), HttpStatus.OK);
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>(new Get_List_utenti_DTO("Errore durante il reperimento degli utenti registrati in piattaforma: " + ex.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
 //
 //
 ////    Endpoint per la modifica di un particolare utente
