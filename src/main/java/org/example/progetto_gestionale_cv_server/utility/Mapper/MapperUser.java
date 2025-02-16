@@ -67,6 +67,7 @@ public class MapperUser {
         utenteDto.setTelefono(utente.getTelefono());
         utenteDto.setRuolo(credenzialiUtente.getRole());
         utenteDto.setId_utente(utente.getId());
+        utenteDto.setActive(utente.getIsActive());
 
         return utenteDto;
 

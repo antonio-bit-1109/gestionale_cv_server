@@ -9,7 +9,16 @@ public class Get_Utente_DTO {
     private String imgProfilo;
     private String telefono;
     private String ruolo;
+    private boolean isActive;
 
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+    
     public Long getId_utente() {
         return id_utente;
     }
