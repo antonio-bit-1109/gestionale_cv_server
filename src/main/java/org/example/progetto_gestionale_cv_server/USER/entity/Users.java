@@ -37,6 +37,16 @@ public class Users {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Credenziali credenziali;
 
+    @Column()
+    private boolean isActive = true;
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
 
     public void setCredenziali(Credenziali credenziali) {
         this.credenziali = credenziali;
