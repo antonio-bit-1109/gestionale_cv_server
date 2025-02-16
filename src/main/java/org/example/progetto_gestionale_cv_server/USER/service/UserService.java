@@ -153,4 +153,15 @@ public class UserService implements IUserService {
         });
         return listaUtenti;
     }
+
+    @Override
+    public boolean handleStatus(Long id_utente) {
+
+        Users utente = this.returnUserIfExist(id_utente);
+        utente.setActive(!utente.getIsActive());
+        userRepository.save(utente);
+        return utente.getIsActive();
+
+
+    }
 }

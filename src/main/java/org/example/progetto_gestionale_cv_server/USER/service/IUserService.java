@@ -23,4 +23,6 @@ public interface IUserService {
     Get_Utente_DTO GetUtenteSingolo(Long id_utente);
 
     List<Get_Utente_DTO> getListaUtenti();
+
+    boolean handleStatus(Long id_utente);
 }

@@ -101,7 +101,8 @@ public class UserController {
     }
 //
 //
-////    Endpoint per la modifica di un particolare utente
+
+    /// /    Endpoint per la modifica di un particolare utente
 //    @PostMapping("/edit")
 //    public ResponseEntity<> modificaUtente(){
 //        try {
@@ -114,14 +115,19 @@ public class UserController {
 //
 //
 //    // soft delete utente, campo isActive false;
-//    @PostMapping("/edit")
-//    public ResponseEntity<> SoftDeleteUtente(){
-//        try {
-//
-//
-//        } catch (RuntimeException ex) {
-//
-//        }
-//    }
+    @GetMapping("/handleStatus/{id_utente}")
+    public ResponseEntity<String> ChangeActiveStatusUtente(@NotNull @PathVariable Long id_utente) {
+        try {
+
+            boolean changeStatus = this.userService.handleStatus(id_utente);
+
+            return changeStatus ?
+                    new ResponseEntity<>("Utente attivato.", HttpStatus.OK) :
+                    new ResponseEntity<>("Utente disattivato.", HttpStatus.OK);
+
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>("Errore durante la cancellazione dell'utente: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 //
 }
