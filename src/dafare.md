@@ -6,3 +6,5 @@
 - [x] inviare al controller , oltre al file pdf anche i dati del candidato tramite form data
 - [] finire i test sui controller
 - [] implementare autenticazione tramite ruoli
+- [] implementare endpoint ricerca per nome,esperienza, competenza
+- [] scrivere documentazione dei test 
