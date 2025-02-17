@@ -199,8 +199,7 @@ public class UserServiceTest {
         when(this.userRepository.findById(id_utente)).thenReturn(Optional.of(utente));
         when(this.credenzialiRepository.findByEmail("prova@gmail.com")).thenReturn(Optional.of(credenziali));
         doNothing().when(this.mapperUser).editingUserData(editDati, utente, credenziali);
-//        when(this.userRepository.save(utente)).thenReturn(utente);
-//        when(this.credenzialiRepository.save(credenziali)).thenReturn(credenziali);
+
 
         boolean result = this.userService.editUtente(editDati, id_utente);
         assertTrue(result);
