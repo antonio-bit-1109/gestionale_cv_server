@@ -38,5 +38,25 @@ public class AdminServiceTest {
 
     @InjectMocks
     AdminService adminService;
-    
+
+    @Test
+    void ritornaTrueSeCaricamentoPdfAbuonFine() throws IOException {
+
+        HashMap<String, String> mapMock = new HashMap<>();
+
+        MultipartFile mockFile = new MockMultipartFile(
+                "file", // name of the file
+                "test.jpg", // original filename
+                "image/jpeg", // content type
+                "test image content".getBytes() // file content
+        );
+
+        String PercorsoSuServer = Paths.get("").toAbsolutePath().toString()
+                + "/src/main/resources/static/LoadedFromAdmin";
+
+        doNothing().when(this.mapperCv).createCv(mapMock, mockFile, PercorsoSuServer);
+
+        boolean result = this.adminService.savePDFeAssegna(mockFile, mapMock);
+        assertTrue(result);
+    }
 }

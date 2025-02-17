@@ -100,8 +100,6 @@ public class UserController {
 
         }
     }
-//
-//
 
     /// /    Endpoint per la modifica di un particolare utente
     @PostMapping("/edit/{id_utente}")
@@ -131,5 +129,17 @@ public class UserController {
             return new ResponseEntity<>("Errore durante la cancellazione dell'utente: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+//    @GetMapping("/findBy")
+//    public ResponseEntity<Get_List_utenti_DTO> FindUserByCompetenza(
+//            @RequestParam("competenza") String competenzaQuery
+//    ) {
+//
+//        try {
+//
+//        } catch (RuntimeException e) {
+//            return new ResponseEntity<>()
+//        }
+//    }
 //
 }
