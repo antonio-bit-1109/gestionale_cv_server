@@ -122,6 +122,21 @@ public class CvController {
         }
     }
 
+    @GetMapping("/findByEsperienze")
+    public ResponseEntity<Get_All_cv_DTO> trovaCvTramiteEsperienze(
+            @RequestParam("esperienze") String esperienze
+    ) {
+        try {
+            List<BaseDTO> listaCvPerEsperienze = this.cvService.trovaCvDalleEsperienze(esperienze);
+            return new ResponseEntity<>(new Get_All_cv_DTO(listaCvPerEsperienze, null), HttpStatus.OK);
+
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new Get_All_cv_DTO
+                    (null, "Errore durante il reperimento di tutti i curriculum filtrati per nome " + esperienze + " : " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
 //    @GetMapping("/findBy")
 //    public ResponseEntity<Get_List_utenti_DTO> FindUsersByNome(
 //            @RequestParam("esperienze") String esperienze

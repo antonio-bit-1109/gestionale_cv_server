@@ -26,4 +26,7 @@ public interface ICvService {
     List<BaseDTO> findByCompetenza(String competenza);
 
     List<BaseDTO> trovaCvDalNomeUtente(String nome);
+
+    List<BaseDTO> trovaCvDalleEsperienze(String esperienze);
+
 }

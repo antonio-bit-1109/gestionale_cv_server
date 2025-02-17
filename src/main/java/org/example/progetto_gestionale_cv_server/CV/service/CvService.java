@@ -150,5 +150,10 @@ public class CvService implements ICvService {
 
     }
 
+    @Override
+    public List<BaseDTO> trovaCvDalleEsperienze(String esperienze) {
+        return List.of();
+    }
+
 
 }
