@@ -2,6 +2,7 @@ package org.example.progetto_gestionale_cv_server.utility.Mapper;
 
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.entity.Credenziali;
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.repository.CredenzialiRepository;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.Edit_utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_Utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -103,5 +104,31 @@ public class MapperUser {
         }
 
         return true;
+    }
+
+    public void editingUserData(Edit_utente_DTO datiEdit, Users utente, Credenziali credenzialiUtente) {
+
+        if (!(utente.getNome().equals(datiEdit.getNome()))) {
+            utente.setNome(datiEdit.getNome());
+        }
+
+        if (!(utente.getCognome().equals(datiEdit.getCognome()))) {
+            utente.setCognome(datiEdit.getCognome());
+        }
+
+        if (!(utente.getTelefono().equals(datiEdit.getTelefono()))) {
+            utente.setTelefono(datiEdit.getTelefono());
+        }
+
+        if (!(credenzialiUtente.getEmail().equals(datiEdit.getEmail()))) {
+            credenzialiUtente.setEmail(datiEdit.getEmail());
+        }
+
+        if (!(this.passwordEncoder.matches(datiEdit.getPassword(), credenzialiUtente.getPassword()))) {
+            credenzialiUtente.setPassword(this.passwordEncoder.encode(datiEdit.getPassword()));
+        }
+
+        this.userRepository.save(utente);
+        this.credenzialiRepository.save(credenzialiUtente);
     }
 }

@@ -3,6 +3,7 @@ package org.example.progetto_gestionale_cv_server.USER.testServices;
 import org.apache.catalina.User;
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.entity.Credenziali;
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.repository.CredenzialiRepository;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.Edit_utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
@@ -172,6 +173,36 @@ public class UserServiceTest {
         when(this.userRepository.save(utente)).thenReturn(utente);
 
         boolean result = this.userService.cambioImgProfilo(mockFile, 1L);
+        assertTrue(result);
+    }
+
+
+    @Test
+    void QuandoMOdificoDatiUtenteRitornaTrue() {
+
+        Edit_utente_DTO editDati = new Edit_utente_DTO();
+        Long id_utente = 1L;
+        Users utente = new Users();
+        Credenziali credenziali = new Credenziali();
+        utente.setNome("prova");
+        utente.setCognome("prova");
+        utente.setTelefono("+39 333 5476685");
+        utente.setProfileImage("default");
+        utente.setConsensoTrattamentoDati(true);
+        credenziali.setEmail("prova@gmail.com");
+        credenziali.setRole("USER");
+        credenziali.setPassword("password");
+        utente.setCredenziali(credenziali);
+        credenziali.setUser(utente);
+
+
+        when(this.userRepository.findById(id_utente)).thenReturn(Optional.of(utente));
+        when(this.credenzialiRepository.findByEmail("prova@gmail.com")).thenReturn(Optional.of(credenziali));
+        doNothing().when(this.mapperUser).editingUserData(editDati, utente, credenziali);
+//        when(this.userRepository.save(utente)).thenReturn(utente);
+//        when(this.credenzialiRepository.save(credenziali)).thenReturn(credenziali);
+
+        boolean result = this.userService.editUtente(editDati, id_utente);
         assertTrue(result);
     }
 }

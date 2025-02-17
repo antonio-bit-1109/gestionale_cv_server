@@ -1,5 +1,6 @@
 package org.example.progetto_gestionale_cv_server.USER.testControllers;
 
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.Edit_utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.TokenResponse;
@@ -93,5 +94,37 @@ public class UserControllerTest {
         assertEquals(Objects.requireNonNull(response.getBody()).getToken(), mockResp.getToken());
         assertNull(response.getBody().getToken());
 
+    }
+
+    @Test
+    void UtenteModificaIpropriDatiConSuccesso() {
+        Edit_utente_DTO editDati = new Edit_utente_DTO();
+        Long id_utente = 1L;
+        when(this.userService.editUtente(editDati, id_utente)).thenReturn(true);
+
+        ResponseEntity<String> response = this.userController.modificaUtente(editDati, id_utente);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Utente modificato con successo.", response.getBody());
+    }
+
+    @Test
+    void ritornaMessaggioUtenteAttivato() {
+
+        Long id_utente = 1L;
+
+        when(this.userService.handleStatus(id_utente)).thenReturn(true);
+
+        ResponseEntity<String> response = this.userController.ChangeActiveStatusUtente(id_utente);
+        assertEquals("Utente attivato.", response.getBody());
+    }
+
+    @Test
+    void ritornaMessaggioUtenteDisattivato() {
+        Long id_utente = 1L;
+
+        when(this.userService.handleStatus(id_utente)).thenReturn(false);
+
+        ResponseEntity<String> response = this.userController.ChangeActiveStatusUtente(id_utente);
+        assertEquals("Utente disattivato.", response.getBody());
     }
 }

@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<Users, Long> {
 
+    Long id(Long id);
 }

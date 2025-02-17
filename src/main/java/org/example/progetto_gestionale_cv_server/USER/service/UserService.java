@@ -4,6 +4,7 @@ import org.apache.catalina.User;
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.entity.Credenziali;
 import org.example.progetto_gestionale_cv_server.CREDENZIALI.repository.CredenzialiRepository;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.CambioImgProfilo_DTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.Edit_utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_List_utenti_DTO;
@@ -155,13 +156,21 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public boolean editUtente(Edit_utente_DTO datiEdit, Long id_utente) {
+        Users utente = this.returnUserIfExist(id_utente);
+        Credenziali credenzialiUtente = this.returnCredenzialiIfExists(utente);
+
+        this.mapperUser.editingUserData(datiEdit, utente, credenzialiUtente);
+        return true;
+    }
+
+    @Override
     public boolean handleStatus(Long id_utente) {
 
         Users utente = this.returnUserIfExist(id_utente);
         utente.setActive(!utente.getIsActive());
         userRepository.save(utente);
         return utente.getIsActive();
-
 
     }
 }

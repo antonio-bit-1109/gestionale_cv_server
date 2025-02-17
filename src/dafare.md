@@ -7,4 +7,5 @@
 - [] finire i test sui controller
 - [] implementare autenticazione tramite ruoli
 - [] implementare endpoint ricerca per nome,esperienza, competenza
-- [] scrivere documentazione dei test 
+- [] scrivere documentazione dei test
+- [] perche i dati in entrata nell edit utente mi ritornano messaggi di errore ?? 

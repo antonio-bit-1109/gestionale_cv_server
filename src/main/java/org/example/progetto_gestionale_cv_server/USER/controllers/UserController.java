@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.apache.coyote.Response;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.CambioImgProfilo_DTO;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.req.Edit_utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.LoginDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_List_utenti_DTO;
@@ -103,18 +104,19 @@ public class UserController {
 //
 
     /// /    Endpoint per la modifica di un particolare utente
-//    @PostMapping("/edit")
-//    public ResponseEntity<> modificaUtente(){
-//        try {
-//
-//
-//        } catch (RuntimeException ex) {
-//
-//        }
-//    }
-//
-//
-//    // soft delete utente, campo isActive false;
+    @PostMapping("/edit/{id_utente}")
+    public ResponseEntity<String> modificaUtente(@Valid @RequestBody Edit_utente_DTO datiEdit, @PathVariable Long id_utente) {
+        try {
+            this.userService.editUtente(datiEdit, id_utente);
+            return new ResponseEntity<>("Utente modificato con successo.", HttpStatus.OK);
+        } catch (RuntimeException ex) {
+
+            return new ResponseEntity<>("errore durante la modifica dell'utente: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    //    // soft delete utente, campo isActive false;
     @GetMapping("/handleStatus/{id_utente}")
     public ResponseEntity<String> ChangeActiveStatusUtente(@NotNull @PathVariable Long id_utente) {
         try {
