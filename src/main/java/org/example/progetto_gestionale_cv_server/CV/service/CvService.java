@@ -117,4 +117,38 @@ public class CvService implements ICvService {
 
         return cvOpt.get();
     }
+
+    @Override
+    public List<BaseDTO> findByCompetenza(String competenza) {
+
+        List<BaseDTO> listaCvDto = new ArrayList<>();
+
+        List<CVs> listaCv = this.cvRepository.findByCompetenzeContainingIgnoreCase(competenza);
+
+        for (CVs cv : listaCv) {
+            listaCvDto.add(this.mapperCv.fromEntityToDTO(cv));
+        }
+        return listaCvDto;
+    }
+
+
+    @Override
+    public List<BaseDTO> trovaCvDalNomeUtente(String nome) {
+
+        List<Users> listaUtenti = this.userService.returnAllUsers();
+        List<BaseDTO> listaCv = new ArrayList<>();
+
+        listaUtenti.stream()
+                .filter(user -> user.getNome().contains(nome))
+                .forEach(users -> {
+                    users.getListaCv().forEach(cVEntity -> {
+                        listaCv.add(this.mapperCv.fromEntityToDTO(cVEntity));
+                    });
+                });
+
+        return listaCv;
+
+    }
+
+
 }

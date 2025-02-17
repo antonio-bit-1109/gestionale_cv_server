@@ -23,4 +23,7 @@ public interface ICvService {
 
     CVs returnCvIfExist(Long id_cv);
 
+    List<BaseDTO> findByCompetenza(String competenza);
+
+    List<BaseDTO> trovaCvDalNomeUtente(String nome);
 }

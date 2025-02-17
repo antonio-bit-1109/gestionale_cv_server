@@ -113,7 +113,7 @@ public class UserService implements IUserService {
         return utenteOpt.get();
     }
 
-    private List<Users> returnAllUsers() {
+    public List<Users> returnAllUsers() {
         return this.userRepository.findAll();
     }
 

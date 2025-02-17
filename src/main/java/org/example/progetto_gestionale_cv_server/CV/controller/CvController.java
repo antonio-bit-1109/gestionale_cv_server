@@ -11,6 +11,7 @@ import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Get_All_cv_DTO;
 import org.example.progetto_gestionale_cv_server.CV.service.CvService;
 import org.example.progetto_gestionale_cv_server.CV.service.ICvService;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Cv_Msg_response;
+import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_List_utenti_DTO;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,4 +89,50 @@ public class CvController {
             return new ResponseEntity<>(new Get_All_cv_DTO(null, "Errore durante il reperimento di tutti i curriculum relativi all'utente."), HttpStatus.OK);
         }
     }
+
+    @GetMapping("/findByCompetenza")
+    public ResponseEntity<Get_All_cv_DTO> FindUsersByCompetenza(
+            @RequestParam("competenza") String competenza
+    ) {
+
+        try {
+            List<BaseDTO> ListaCvCompetenze = this.cvService.findByCompetenza(competenza);
+            return new ResponseEntity<>(new Get_All_cv_DTO(ListaCvCompetenze, null), HttpStatus.OK);
+
+        } catch (RuntimeException e) {
+
+            return new ResponseEntity<>(new Get_All_cv_DTO
+                    (null, "Errore durante il reperimento di tutti i curriculum relativi alla competenza " + competenza + " : " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
+    @GetMapping("/findByNome")
+    public ResponseEntity<Get_All_cv_DTO> trovaCvTramiteNome(
+            @RequestParam("nome") String nome
+    ) {
+        try {
+            List<BaseDTO> listaCvPerNome = this.cvService.trovaCvDalNomeUtente(nome);
+            return new ResponseEntity<>(new Get_All_cv_DTO(listaCvPerNome, null), HttpStatus.OK);
+
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new Get_All_cv_DTO
+                    (null, "Errore durante il reperimento di tutti i curriculum filtrati per nome " + nome + " : " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
+//    @GetMapping("/findBy")
+//    public ResponseEntity<Get_List_utenti_DTO> FindUsersByNome(
+//            @RequestParam("esperienze") String esperienze
+//    ) {
+//
+//        try {
+//            return null;
+//        } catch (RuntimeException e) {
+//            return null;
+//
+//            //    return new ResponseEntity<>()
+//        }
+//    }
 }

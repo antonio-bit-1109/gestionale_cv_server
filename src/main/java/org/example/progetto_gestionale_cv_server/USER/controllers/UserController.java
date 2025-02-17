@@ -130,16 +130,6 @@ public class UserController {
         }
     }
 
-//    @GetMapping("/findBy")
-//    public ResponseEntity<Get_List_utenti_DTO> FindUserByCompetenza(
-//            @RequestParam("competenza") String competenzaQuery
-//    ) {
-//
-//        try {
-//
-//        } catch (RuntimeException e) {
-//            return new ResponseEntity<>()
-//        }
-//    }
+
 //
 }
