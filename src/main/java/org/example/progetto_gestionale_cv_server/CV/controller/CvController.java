@@ -137,18 +137,5 @@ public class CvController {
 
         }
     }
-
-//    @GetMapping("/findBy")
-//    public ResponseEntity<Get_List_utenti_DTO> FindUsersByNome(
-//            @RequestParam("esperienze") String esperienze
-//    ) {
-//
-//        try {
-//            return null;
-//        } catch (RuntimeException e) {
-//            return null;
-//
-//            //    return new ResponseEntity<>()
-//        }
-//    }
+    
 }
