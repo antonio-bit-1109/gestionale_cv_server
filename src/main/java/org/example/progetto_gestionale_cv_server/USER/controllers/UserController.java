@@ -13,6 +13,8 @@ import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Resp_get_utente_
 import org.example.progetto_gestionale_cv_server.USER.service.IUserService;
 import org.example.progetto_gestionale_cv_server.USER.service.UserService;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.TokenResponse;
+import org.example.progetto_gestionale_cv_server.utility.StringResponse.StringResponse;
+import org.example.progetto_gestionale_cv_server.utility.customExceptions.EmailAlreadyUsed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,18 +35,18 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<String> registrazione(@Valid @RequestBody RegistrazioneUtenteDTO datiRegistrazione) {
+    public ResponseEntity<StringResponse> registrazione(@Valid @RequestBody RegistrazioneUtenteDTO datiRegistrazione) {
         try {
             boolean adminCreated = this.userService.registrazioneUtente(datiRegistrazione);
 
             if (adminCreated) {
-                return new ResponseEntity<>("utente admin creato con successo.", HttpStatus.OK);
+                return new ResponseEntity<>(new StringResponse("utente_admin_creato_con_successo."), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("utente creato con successo.", HttpStatus.OK);
+                return new ResponseEntity<>(new StringResponse("utente_creato_con_successo."), HttpStatus.OK);
             }
 
         } catch (RuntimeException e) {
-            return new ResponseEntity<>("Errore in fase di registrazione: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new StringResponse("Errore in fase di registrazione: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

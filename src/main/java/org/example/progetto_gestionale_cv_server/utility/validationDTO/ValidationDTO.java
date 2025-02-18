@@ -2,6 +2,7 @@ package org.example.progetto_gestionale_cv_server.utility.validationDTO;
 
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.utility.customExceptions.CustomPatternException;
+import org.example.progetto_gestionale_cv_server.utility.customExceptions.EmailAlreadyUsed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,6 +37,14 @@ public class ValidationDTO {
     public ResponseEntity<Map<String, String>> handleIllegalArgumentExceptions(CustomPatternException ex) {
         Map<String, String> errMap = new HashMap<>();
         errMap.put(ex.getKeyField(), ex.getMessage());
+
+        return new ResponseEntity<>(errMap, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmailAlreadyUsed.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentExceptions(EmailAlreadyUsed ex) {
+        Map<String, String> errMap = new HashMap<>();
+        errMap.put(ex.getKey(), ex.getMessage());
 
         return new ResponseEntity<>(errMap, HttpStatus.BAD_REQUEST);
     }

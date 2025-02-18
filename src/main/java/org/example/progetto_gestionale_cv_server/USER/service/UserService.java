@@ -12,6 +12,7 @@ import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_Utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperUser;
+import org.example.progetto_gestionale_cv_server.utility.customExceptions.EmailAlreadyUsed;
 import org.example.progetto_gestionale_cv_server.utility.generateToken.GenerateToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.PathMatcher;
@@ -51,6 +52,12 @@ public class UserService implements IUserService {
     // può essere creato solo 1 utente ADMIN per l'applicazione
     @Override
     public boolean registrazioneUtente(RegistrazioneUtenteDTO datiUtente) throws RuntimeException {
+
+        Optional<Credenziali> credenzialiOpt = this.credenzialiRepository.findByEmail(datiUtente.getEmail());
+
+        if (credenzialiOpt.isPresent()) {
+            throw new EmailAlreadyUsed("questa mail non è disponibile. Prova con una diversa", "email");
+        }
 
         if (this.mapperUser.isCreatingAnAdmin(datiUtente)) {
             return this.MapUtenteToEntity(datiUtente, true);
