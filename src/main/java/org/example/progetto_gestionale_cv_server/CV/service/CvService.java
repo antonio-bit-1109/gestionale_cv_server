@@ -152,7 +152,18 @@ public class CvService implements ICvService {
 
     @Override
     public List<BaseDTO> trovaCvDalleEsperienze(String esperienze) {
-        return List.of();
+
+        List<CVs> listaCv = this.cvRepository.findAll();
+        List<BaseDTO> listaCvDTO = new ArrayList<>();
+
+        listaCv.forEach(cv -> {
+            if (cv.getEsperienze_Precedenti().toLowerCase().contains(esperienze.replace("_", " "))) {
+                listaCvDTO.add(this.mapperCv.fromEntityToDTO(cv));
+            }
+        });
+
+        return listaCvDTO;
+
     }
 
 

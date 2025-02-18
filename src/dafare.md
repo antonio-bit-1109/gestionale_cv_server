@@ -5,7 +5,7 @@
   il campo id user sarà vuoto.
 - [x] inviare al controller , oltre al file pdf anche i dati del candidato tramite form data
 - [x] finire i test sui controller
-- [] implementare autenticazione tramite ruoli
-- [] implementare endpoint ricerca per esperienze
+- [x] implementare autenticazione tramite ruoli
+- [x] implementare endpoint ricerca per esperienze
 - [x] scrivere documentazione dei test
 - [x] perche i dati in entrata nell edit utente mi ritornano messaggi di errore ?? 

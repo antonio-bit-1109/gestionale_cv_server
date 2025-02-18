@@ -56,7 +56,7 @@ public class CvController {
 
     }
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<String> cancellaCV(
             @Valid @RequestBody ID_UTENTE_CV_DTO ids_utente_cv) {
         try {
@@ -80,6 +80,7 @@ public class CvController {
     }
 
     // specifico che il parametro in entrata sia l'id dell utente , tipo numerico e non null
+    // prendo tutti i cv di uno specifico utente
     @GetMapping("/get-all/{id}")
     public ResponseEntity<Get_All_cv_DTO> getAllCV(@PathVariable("id") @NotNull @NumberFormat Long id_utente) {
         try {
