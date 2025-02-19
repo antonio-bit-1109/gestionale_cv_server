@@ -56,7 +56,7 @@ public class UserService implements IUserService {
         Optional<Credenziali> credenzialiOpt = this.credenzialiRepository.findByEmail(datiUtente.getEmail());
 
         if (credenzialiOpt.isPresent()) {
-            throw new EmailAlreadyUsed("questa mail non è disponibile. Prova con una diversa", "email");
+            throw new EmailAlreadyUsed("questa mail non è disponibile. Provane con una diversa", "email");
         }
 
         if (this.mapperUser.isCreatingAnAdmin(datiUtente)) {

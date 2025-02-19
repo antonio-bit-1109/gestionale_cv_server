@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 
 public class Cv_get_DTO extends BaseDTO {
 
+    private Long id_cv;
     private String titolo;
     private String esperienze_Precedenti;
     private String competenze;
@@ -16,6 +17,14 @@ public class Cv_get_DTO extends BaseDTO {
     private Timestamp updated_at;
     private String proprietarioCV;
     private String Path_file_System_pdf;
+
+    public void setId_cv(Long id_cv) {
+        this.id_cv = id_cv;
+    }
+
+    public Long getId_cv() {
+        return id_cv;
+    }
 
     public String getPath_file_System_pdf() {
         return Path_file_System_pdf;

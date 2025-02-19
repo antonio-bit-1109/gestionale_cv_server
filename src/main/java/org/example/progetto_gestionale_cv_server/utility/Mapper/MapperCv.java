@@ -56,6 +56,7 @@ public class MapperCv {
     // data l'entity cv ritorna una dto ad hoc per la get del singolo cv
     public BaseDTO fromEntityToDTO(CVs cv) {
         Cv_get_DTO cvDTO = new Cv_get_DTO();
+        cvDTO.setId_cv(cv.getId());
         cvDTO.setPath_file_System_pdf(cv.getNome_file_pdf());
         cvDTO.setCompetenze(cv.getCompetenze());
         cvDTO.setCreated_at(cv.getCreated_at());
@@ -114,7 +115,7 @@ public class MapperCv {
         }
 
         this.generazionePDF.CreazionePDFFileSystem(users, cv, true);
-        
+
     }
 
     public void createCv(HashMap<String, String> mappaParti, MultipartFile file, String percorsoFileSuServer) {
