@@ -12,6 +12,7 @@ import org.example.progetto_gestionale_cv_server.CV.service.CvService;
 import org.example.progetto_gestionale_cv_server.CV.service.ICvService;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Cv_Msg_response;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_List_utenti_DTO;
+import org.example.progetto_gestionale_cv_server.utility.StringResponse.StringResponse;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,37 +34,37 @@ public class CvController {
 
     // creazione record cv e relativo file .pdf su file system
     @PostMapping("/create")
-    public ResponseEntity<String> GeneraPdF(@Valid @RequestBody DatiCreazionePDF_DTO datiCreazionePDFDto) {
+    public ResponseEntity<StringResponse> GeneraPdF(@Valid @RequestBody DatiCreazionePDF_DTO datiCreazionePDFDto) {
         try {
             this.cvService.creaPDF_Record_CV(datiCreazionePDFDto);
-            return new ResponseEntity<>("Curriculum creato con successo. ", HttpStatus.OK);
+            return new ResponseEntity<>(new StringResponse("Curriculum creato con successo. "), HttpStatus.OK);
 
         } catch (RuntimeException | IOException ex) {
-            return new ResponseEntity<>("Errore durante la creazione del curriculum: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new StringResponse("Errore durante la creazione del curriculum: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     // modifica record cv e relativo file .pdf su file system
     // (è una modifica finta, viene cancellato e ricreato sulla base dei nuovi dati forniti dall utente)
     @PostMapping("edit")
-    public ResponseEntity<String> modificaPDF(@Valid @RequestBody DatiModifica_cv_DTO datiModificaPDFDto) {
+    public ResponseEntity<StringResponse> modificaPDF(@Valid @RequestBody DatiModifica_cv_DTO datiModificaPDFDto) {
         try {
             this.cvService.modificaPDF_Record_CV(datiModificaPDFDto);
-            return new ResponseEntity<>("curriculum modificato con successo.", HttpStatus.OK);
+            return new ResponseEntity<>(new StringResponse("curriculum modificato con successo."), HttpStatus.OK);
         } catch (RuntimeException | IOException ex) {
-            return new ResponseEntity<>("Errore durante la modifica del curriculum: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new StringResponse("Errore durante la modifica del curriculum: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<String> cancellaCV(
+    public ResponseEntity<StringResponse> cancellaCV(
             @Valid @RequestBody ID_UTENTE_CV_DTO ids_utente_cv) {
         try {
             this.cvService.CancellaCV(ids_utente_cv);
-            return new ResponseEntity<>("cv cancellato con successo.", HttpStatus.OK);
+            return new ResponseEntity<>(new StringResponse("cv cancellato con successo."), HttpStatus.OK);
         } catch (RuntimeException | IOException ex) {
-            return new ResponseEntity<>("errore durante la cancellazione del curriculum: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new StringResponse("errore durante la cancellazione del curriculum: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -137,5 +138,5 @@ public class CvController {
 
         }
     }
-    
+
 }

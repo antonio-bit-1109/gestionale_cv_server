@@ -6,6 +6,7 @@ import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUten
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.TokenResponse;
 import org.example.progetto_gestionale_cv_server.USER.controllers.UserController;
 import org.example.progetto_gestionale_cv_server.USER.service.UserService;
+import org.example.progetto_gestionale_cv_server.utility.StringResponse.StringResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,9 +36,9 @@ public class UserControllerTest {
 
         when(this.userService.registrazioneUtente(dataMockRegistrazione)).thenReturn(true);
 
-        ResponseEntity<String> response = this.userController.registrazione(dataMockRegistrazione);
+        ResponseEntity<StringResponse> response = this.userController.registrazione(dataMockRegistrazione);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("utente admin creato con successo.", response.getBody());
+        assertEquals("utente_admin_creato_con_successo.", response.getBody().getMessage());
     }
 
     @Test
@@ -46,9 +47,9 @@ public class UserControllerTest {
 
         when(this.userService.registrazioneUtente(dataMockRegistrazione)).thenReturn(false);
 
-        ResponseEntity<String> response = this.userController.registrazione(dataMockRegistrazione);
+        ResponseEntity<StringResponse> response = this.userController.registrazione(dataMockRegistrazione);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("utente creato con successo.", response.getBody());
+        assertEquals("utente_creato_con_successo.", response.getBody().getMessage());
     }
 
     @Test
@@ -58,7 +59,7 @@ public class UserControllerTest {
         when(this.userService.registrazioneUtente(dataMockRegistrazione))
                 .thenThrow(new RuntimeException("errore"));
 
-        ResponseEntity<String> response = this.userController.registrazione(dataMockRegistrazione);
+        ResponseEntity<StringResponse> response = this.userController.registrazione(dataMockRegistrazione);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
@@ -102,9 +103,9 @@ public class UserControllerTest {
         Long id_utente = 1L;
         when(this.userService.editUtente(editDati, id_utente)).thenReturn(true);
 
-        ResponseEntity<String> response = this.userController.modificaUtente(editDati, id_utente);
+        ResponseEntity<StringResponse> response = this.userController.modificaUtente(editDati, id_utente);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Utente modificato con successo.", response.getBody());
+        assertEquals("Utente modificato con successo.", Objects.requireNonNull(response.getBody()).getMessage());
     }
 
     @Test
@@ -114,8 +115,8 @@ public class UserControllerTest {
 
         when(this.userService.handleStatus(id_utente)).thenReturn(true);
 
-        ResponseEntity<String> response = this.userController.ChangeActiveStatusUtente(id_utente);
-        assertEquals("Utente attivato.", response.getBody());
+        ResponseEntity<StringResponse> response = this.userController.ChangeActiveStatusUtente(id_utente);
+        assertEquals("Utente attivato.", Objects.requireNonNull(response.getBody()).getMessage());
     }
 
     @Test
@@ -124,7 +125,7 @@ public class UserControllerTest {
 
         when(this.userService.handleStatus(id_utente)).thenReturn(false);
 
-        ResponseEntity<String> response = this.userController.ChangeActiveStatusUtente(id_utente);
-        assertEquals("Utente disattivato.", response.getBody());
+        ResponseEntity<StringResponse> response = this.userController.ChangeActiveStatusUtente(id_utente);
+        assertEquals("Utente disattivato.", Objects.requireNonNull(response.getBody()).getMessage());
     }
 }

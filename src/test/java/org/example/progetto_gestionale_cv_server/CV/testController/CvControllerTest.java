@@ -8,6 +8,7 @@ import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Cv_Msg_response;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Get_All_cv_DTO;
 import org.example.progetto_gestionale_cv_server.CV.controller.CvController;
 import org.example.progetto_gestionale_cv_server.CV.service.CvService;
+import org.example.progetto_gestionale_cv_server.utility.StringResponse.StringResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,8 +40,8 @@ public class CvControllerTest {
         DatiCreazionePDF_DTO daticreazMock = new DatiCreazionePDF_DTO();
         when(this.cvService.creaPDF_Record_CV(daticreazMock)).thenReturn(true);
 
-        ResponseEntity<String> response = this.cvController.GeneraPdF(daticreazMock);
-        assertEquals("Curriculum creato con successo. ", response.getBody());
+        ResponseEntity<StringResponse> response = this.cvController.GeneraPdF(daticreazMock);
+        assertEquals("Curriculum creato con successo. ", response.getBody().getMessage());
     }
 
     @Test
@@ -50,7 +51,7 @@ public class CvControllerTest {
         when(this.cvService.creaPDF_Record_CV(daticreazMock))
                 .thenThrow(new RuntimeException("errore creazione cv"));
 
-        ResponseEntity<String> response = this.cvController.GeneraPdF(daticreazMock);
+        ResponseEntity<StringResponse> response = this.cvController.GeneraPdF(daticreazMock);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
@@ -61,8 +62,8 @@ public class CvControllerTest {
         when(this.cvService.modificaPDF_Record_CV(modificaMock))
                 .thenReturn(true);
 
-        ResponseEntity<String> response = this.cvController.modificaPDF(modificaMock);
-        assertEquals("curriculum modificato con successo.", response.getBody());
+        ResponseEntity<StringResponse> response = this.cvController.modificaPDF(modificaMock);
+        assertEquals("curriculum modificato con successo.", Objects.requireNonNull(response.getBody()).getMessage());
     }
 
     @Test
@@ -72,7 +73,7 @@ public class CvControllerTest {
         when(this.cvService.modificaPDF_Record_CV(modificaMock))
                 .thenThrow(new RuntimeException("errore modifica cv"));
 
-        ResponseEntity<String> response = this.cvController.modificaPDF(modificaMock);
+        ResponseEntity<StringResponse> response = this.cvController.modificaPDF(modificaMock);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
@@ -81,8 +82,8 @@ public class CvControllerTest {
         ID_UTENTE_CV_DTO idsUtenteCvMock = new ID_UTENTE_CV_DTO();
         when(this.cvService.CancellaCV(idsUtenteCvMock)).thenReturn(true);
 
-        ResponseEntity<String> response = this.cvController.cancellaCV(idsUtenteCvMock);
-        assertEquals("cv cancellato con successo.", response.getBody());
+        ResponseEntity<StringResponse> response = this.cvController.cancellaCV(idsUtenteCvMock);
+        assertEquals("cv cancellato con successo.", Objects.requireNonNull(response.getBody()).getMessage());
     }
 
     @Test
@@ -90,7 +91,7 @@ public class CvControllerTest {
         ID_UTENTE_CV_DTO idsUtenteCvMock = new ID_UTENTE_CV_DTO();
         doThrow(new RuntimeException("errore cancellazione cv")).when(this.cvService).CancellaCV(idsUtenteCvMock);
 
-        ResponseEntity<String> response = this.cvController.cancellaCV(idsUtenteCvMock);
+        ResponseEntity<StringResponse> response = this.cvController.cancellaCV(idsUtenteCvMock);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 

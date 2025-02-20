@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @PostMapping("/upload/photo")
-    public ResponseEntity<String> caricamentoNuovaImgProfilo(
+    public ResponseEntity<StringResponse> caricamentoNuovaImgProfilo(
             @NotNull @RequestParam("file") MultipartFile file,
             @NotNull @RequestPart("id_utente") String id_utente) {
         try {
@@ -70,10 +70,10 @@ public class UserController {
             Long idUser = Long.parseLong(id_utente);
 
             this.userService.cambioImgProfilo(file, idUser);
-            return new ResponseEntity<>("immagine del profilo caricata con successo.", HttpStatus.OK);
+            return new ResponseEntity<>(new StringResponse("immagine del profilo caricata con successo."), HttpStatus.OK);
 
         } catch (RuntimeException | IOException ex) {
-            return new ResponseEntity<>("Errore durante il caricamento dell'immagine:" + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new StringResponse("Errore durante il caricamento dell'immagine:" + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
@@ -105,30 +105,30 @@ public class UserController {
 
     /// /    Endpoint per la modifica di un particolare utente
     @PostMapping("/edit/{id_utente}")
-    public ResponseEntity<String> modificaUtente(@Valid @RequestBody Edit_utente_DTO datiEdit, @PathVariable Long id_utente) {
+    public ResponseEntity<StringResponse> modificaUtente(@Valid @RequestBody Edit_utente_DTO datiEdit, @PathVariable Long id_utente) {
         try {
             this.userService.editUtente(datiEdit, id_utente);
-            return new ResponseEntity<>("Utente modificato con successo.", HttpStatus.OK);
+            return new ResponseEntity<>(new StringResponse("Utente modificato con successo."), HttpStatus.OK);
         } catch (RuntimeException ex) {
 
-            return new ResponseEntity<>("errore durante la modifica dell'utente: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new StringResponse("errore durante la modifica dell'utente: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
 
     //    // soft delete utente, campo isActive false;
     @GetMapping("/handleStatus/{id_utente}")
-    public ResponseEntity<String> ChangeActiveStatusUtente(@NotNull @PathVariable Long id_utente) {
+    public ResponseEntity<StringResponse> ChangeActiveStatusUtente(@NotNull @PathVariable Long id_utente) {
         try {
 
             boolean changeStatus = this.userService.handleStatus(id_utente);
 
             return changeStatus ?
-                    new ResponseEntity<>("Utente attivato.", HttpStatus.OK) :
-                    new ResponseEntity<>("Utente disattivato.", HttpStatus.OK);
+                    new ResponseEntity<>(new StringResponse("Utente attivato."), HttpStatus.OK) :
+                    new ResponseEntity<>(new StringResponse("Utente disattivato."), HttpStatus.OK);
 
         } catch (RuntimeException ex) {
-            return new ResponseEntity<>("Errore durante la cancellazione dell'utente: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new StringResponse("Errore durante la cancellazione dell'utente: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

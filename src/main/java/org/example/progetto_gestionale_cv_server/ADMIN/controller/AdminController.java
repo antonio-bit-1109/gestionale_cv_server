@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.Root;
 import jakarta.validation.constraints.NotNull;
 import org.example.progetto_gestionale_cv_server.ADMIN.service.AdminService;
 import org.example.progetto_gestionale_cv_server.ADMIN.service.IAdminService;
+import org.example.progetto_gestionale_cv_server.utility.StringResponse.StringResponse;
 import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.PDFExtractor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class AdminController {
     }
 
     @PostMapping("/assignment")
-    public ResponseEntity<String> caricaCvPdf(
+    public ResponseEntity<StringResponse> caricaCvPdf(
             @NotNull @RequestParam("file") MultipartFile file,
             @NotNull @RequestPart("id_utente") String id_utente,
             @NotNull @RequestPart("titolo") String titolo,
@@ -39,7 +40,7 @@ public class AdminController {
     ) {
 
         if (file.isEmpty()) {
-            return new ResponseEntity<>("nessun file inviato", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new StringResponse("nessun file inviato"), HttpStatus.BAD_REQUEST);
         }
 
         try {
@@ -54,10 +55,10 @@ public class AdminController {
             mappaParti.put("lingue_conosciute", lingue_conosciute);
 
             this.adminService.savePDFeAssegna(file, mappaParti);
-            return new ResponseEntity<>("file pdf salvato con successo", HttpStatus.OK);
+            return new ResponseEntity<>(new StringResponse("file pdf salvato con successo"), HttpStatus.OK);
 
         } catch (RuntimeException | IOException e) {
-            return new ResponseEntity<>("errore durante il salvataggio del file: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new StringResponse("errore durante il salvataggio del file: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 

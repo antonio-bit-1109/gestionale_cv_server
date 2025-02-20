@@ -2,6 +2,7 @@ package org.example.progetto_gestionale_cv_server.ADMIN.testControllers;
 
 import org.example.progetto_gestionale_cv_server.ADMIN.controller.AdminController;
 import org.example.progetto_gestionale_cv_server.ADMIN.service.IAdminService;
+import org.example.progetto_gestionale_cv_server.utility.StringResponse.StringResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 import static org.mockito.Mockito.when;
 
@@ -54,11 +56,11 @@ public class AdminControllerTest {
     void ritornaUnaBadRequestAlClient() {
 
         MultipartFile emptyFile = new MockMultipartFile("file", new byte[0]);
-        ResponseEntity<String> response = adminController.caricaCvPdf(
+        ResponseEntity<StringResponse> response = adminController.caricaCvPdf(
                 emptyFile, "1", "titolo", "competenze", "descrizione_generale", "esperienze_precedenti", "istruzione", "lingue_conosciute"
         );
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("nessun file inviato", response.getBody());
+        assertEquals("nessun file inviato", Objects.requireNonNull(response.getBody()).getMessage());
     }
 
     @Test
@@ -66,10 +68,10 @@ public class AdminControllerTest {
 
         when(this.adminService.savePDFeAssegna(this.mockFile, this.mapMock)).thenReturn(true);
 
-        ResponseEntity<String> response = this.adminController.caricaCvPdf(
+        ResponseEntity<StringResponse> response = this.adminController.caricaCvPdf(
                 this.mockFile, "1", "titolo", "competenze", "descrizione_generale", "esperienze_precedenti", "istruzione", "lingue_conosciute"
         );
-        assertEquals("file pdf salvato con successo", response.getBody());
+        assertEquals("file pdf salvato con successo", Objects.requireNonNull(response.getBody()).getMessage());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
