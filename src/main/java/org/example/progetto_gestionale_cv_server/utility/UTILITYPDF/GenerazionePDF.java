@@ -36,27 +36,35 @@ public class GenerazionePDF {
     public String getPath(Users utente, CVs cv) {
 
         String RootPath = Paths.get("").toAbsolutePath().toString();
-        String nameFilePDF = utente.getNome() + "_" + utente.getCognome() + "_" + UUID.randomUUID() + ".pdf";
+        String nameFilePDF = this.generateNamePDF(utente);
         return RootPath + "/src/main/resources/static/" + nameFilePDF;
     }
 
-    public void CancellaPDF_file_System(String path_location_pdf) throws IOException {
-        Path path = Paths.get(path_location_pdf);
-        Files.delete(path);
+    private String generateNamePDF(Users utente) {
+        return utente.getNome() + "_" + utente.getCognome() + "_" + UUID.randomUUID() + ".pdf";
+    }
+
+
+    public void CancellaPDF_file_System(CVs cv) throws IOException {
+        String RootPath = Paths.get("").toAbsolutePath().toString();
+        // Path path = Paths.get(cv.getNome_file_pdf());
+        Files.delete(Path.of(RootPath + "/src/main/resources/static/" + cv.getNome_file_pdf()));
     }
 
     public void CreazionePDFFileSystem(Users utente, CVs cv, boolean alreadyCvPresent) throws IOException {
 
         if (alreadyCvPresent) {
-            Path path = Paths.get(cv.getNome_file_pdf());
-            Files.delete(path);
+            this.CancellaPDF_file_System(cv);
         }
 
         String dest = this.getPath(utente, cv);
 
-        Path path = Paths.get(dest);
+        // Path path = Paths.get(dest);
         // setto l'Sindirizzo di dove verrà salvato il file direttamente nel metodo;
-        cv.setNome_file_pdf(dest);
+
+        int index = dest.indexOf("static") + 7;
+        String nomeFilePdf = dest.substring(index);
+        cv.setNome_file_pdf(nomeFilePdf);
 
 
         try (PdfWriter writer = new PdfWriter(dest);
