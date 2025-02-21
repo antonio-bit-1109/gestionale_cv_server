@@ -17,6 +17,24 @@ public class Cv_get_DTO extends BaseDTO {
     private Timestamp updated_at;
     private String proprietarioCV;
     private String Path_file_System_pdf;
+    private String email;
+    private String telefono;
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
 
     public void setId_cv(Long id_cv) {
         this.id_cv = id_cv;

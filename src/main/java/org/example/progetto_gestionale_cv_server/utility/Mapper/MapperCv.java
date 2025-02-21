@@ -67,6 +67,8 @@ public class MapperCv {
         cvDTO.setTitolo(cv.getTitolo());
         cvDTO.setEsperienze_Precedenti(cv.getEsperienze_Precedenti());
         cvDTO.setProprietarioCV(cv.getUser().getNome() + " " + cv.getUser().getCognome());
+        cvDTO.setEmail(cv.getUser().getCredenziali().getEmail());
+        cvDTO.setTelefono(cv.getUser().getTelefono());
         return cvDTO;
     }
 
