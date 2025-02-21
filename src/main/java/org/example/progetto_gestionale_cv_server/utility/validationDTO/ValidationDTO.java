@@ -3,6 +3,7 @@ package org.example.progetto_gestionale_cv_server.utility.validationDTO;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUtenteDTO;
 import org.example.progetto_gestionale_cv_server.utility.customExceptions.CustomPatternException;
 import org.example.progetto_gestionale_cv_server.utility.customExceptions.EmailAlreadyUsed;
+import org.example.progetto_gestionale_cv_server.utility.customExceptions.FileDoesntExist;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +44,14 @@ public class ValidationDTO {
 
     @ExceptionHandler(EmailAlreadyUsed.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgumentExceptions(EmailAlreadyUsed ex) {
+        Map<String, String> errMap = new HashMap<>();
+        errMap.put(ex.getKey(), ex.getMessage());
+
+        return new ResponseEntity<>(errMap, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FileDoesntExist.class)
+    public ResponseEntity<Map<String, String>> handleFileDontExist(FileDoesntExist ex) {
         Map<String, String> errMap = new HashMap<>();
         errMap.put(ex.getKey(), ex.getMessage());
 

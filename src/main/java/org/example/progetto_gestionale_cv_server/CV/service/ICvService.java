@@ -5,6 +5,8 @@ import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiModifica_cv_DTO
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.ID_UTENTE_CV_DTO;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.req.DatiCreazionePDF_DTO;
 import org.example.progetto_gestionale_cv_server.CV.entity.CVs;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,4 +31,7 @@ public interface ICvService {
 
     List<BaseDTO> trovaCvDalleEsperienze(String esperienze);
 
+    Resource downloadCurriculum(String id_cv);
+
+    String getFileName();
 }

@@ -11,10 +11,18 @@ import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.example.progetto_gestionale_cv_server.USER.service.UserService;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperCv;
 import org.example.progetto_gestionale_cv_server.utility.UTILITYPDF.GenerazionePDF;
+import org.example.progetto_gestionale_cv_server.utility.customExceptions.FileDoesntExist;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +35,15 @@ public class CvService implements ICvService {
     private final MapperCv mapperCv;
     private final GenerazionePDF generazionePDF;
     private final UserService userService;
+    private String fileName;
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
 
     public CvService(CvRepository cvRepo, UserRepository userRepository, MapperCv mapperCv, GenerazionePDF generazionePDF, UserService userService) {
         this.cvRepository = cvRepo;
@@ -34,6 +51,7 @@ public class CvService implements ICvService {
         this.mapperCv = mapperCv;
         this.generazionePDF = generazionePDF;
         this.userService = userService;
+
     }
 
     //metodo di creazione del pdf e popolamento tabella cv
@@ -166,5 +184,25 @@ public class CvService implements ICvService {
 
     }
 
+    @Override
+    public Resource downloadCurriculum(String id_cv) {
+        try {
 
+            CVs cv = returnCvIfExist(Long.parseLong(id_cv));
+
+            String filePath = Paths.get("").toAbsolutePath().toString();
+            Path path = Paths.get(filePath + "/src/main/resources/static/" + cv.getNome_file_pdf());
+            File file = path.toFile();
+
+            if (!file.exists()) {
+                throw new FileDoesntExist("il file non esiste", "download file");
+            }
+
+            setFileName(cv.getNome_file_pdf());
+            return new FileSystemResource(file);
+        } catch (Exception e) {
+
+            throw new RuntimeException("errore durante il download del file:" + e.getMessage());
+        }
+    }
 }

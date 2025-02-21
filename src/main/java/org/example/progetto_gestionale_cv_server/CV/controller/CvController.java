@@ -1,5 +1,6 @@
 package org.example.progetto_gestionale_cv_server.CV.controller;
 
+import org.springframework.core.io.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -13,8 +14,11 @@ import org.example.progetto_gestionale_cv_server.CV.service.ICvService;
 import org.example.progetto_gestionale_cv_server.CV.DTOs.resp.Cv_Msg_response;
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_List_utenti_DTO;
 import org.example.progetto_gestionale_cv_server.utility.StringResponse.StringResponse;
+import org.springframework.core.io.UrlResource;
 import org.springframework.format.annotation.NumberFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -139,4 +143,29 @@ public class CvController {
         }
     }
 
+
+    @GetMapping("/downloadPDF")
+    public ResponseEntity<Resource> downloadPdf(
+            @RequestParam("id_cv") String id_cv) {
+
+        try {
+            Resource resource = cvService.downloadCurriculum(id_cv);
+
+            if (resource == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + this.cvService.getFileName());
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
+
+            return ResponseEntity.ok().headers(headers).body(resource);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null);
+        }
+
+    }
+
+
 }
+
