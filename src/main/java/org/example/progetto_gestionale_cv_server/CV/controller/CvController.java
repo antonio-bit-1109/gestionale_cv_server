@@ -161,7 +161,7 @@ public class CvController {
 
             return ResponseEntity.ok().headers(headers).body(resource);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(null);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
