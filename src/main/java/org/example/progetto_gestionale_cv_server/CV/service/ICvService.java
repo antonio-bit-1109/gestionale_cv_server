@@ -19,7 +19,7 @@ public interface ICvService {
 
     boolean CancellaCV(ID_UTENTE_CV_DTO ids_utente_cv) throws IOException;
 
-    BaseDTO getCv(ID_UTENTE_CV_DTO dati_id);
+    BaseDTO getCv(Long id_cv);
 
     List<BaseDTO> getAll_CV(Long id_utente);
 

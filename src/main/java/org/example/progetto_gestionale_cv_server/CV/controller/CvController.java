@@ -72,11 +72,11 @@ public class CvController {
         }
     }
 
-    @PostMapping("/get")
-    public ResponseEntity<Cv_Msg_response> getCV(@Valid @RequestBody ID_UTENTE_CV_DTO ids_utente_cv) {
+    @GetMapping("/get/{id_cv}")
+    public ResponseEntity<Cv_Msg_response> getCV(@NotNull @PathVariable Long id_cv) {
         try {
 
-            BaseDTO cvDTO = this.cvService.getCv(ids_utente_cv);
+            BaseDTO cvDTO = this.cvService.getCv(id_cv);
             return new ResponseEntity<>(new Cv_Msg_response(cvDTO, null), HttpStatus.OK);
 
         } catch (RuntimeException ex) {

@@ -97,22 +97,23 @@ public class CvControllerTest {
 
     @Test
     void getCVConSuccesso() {
-        ID_UTENTE_CV_DTO idsUtenteCvMock = new ID_UTENTE_CV_DTO();
+//        ID_UTENTE_CV_DTO idsUtenteCvMock = new ID_UTENTE_CV_DTO();
+        Long id_cv = 1L;
         BaseDTO cvDTOMock = new BaseDTO();
 
-        when(this.cvService.getCv(idsUtenteCvMock)).thenReturn(cvDTOMock);
+        when(this.cvService.getCv(id_cv)).thenReturn(cvDTOMock);
 
-        ResponseEntity<Cv_Msg_response> response = this.cvController.getCV(idsUtenteCvMock);
+        ResponseEntity<Cv_Msg_response> response = this.cvController.getCV(id_cv);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNull(Objects.requireNonNull(response.getBody()).getMessage());
     }
 
     @Test
     void getCVConErrore() {
-        ID_UTENTE_CV_DTO idsUtenteCvMock = new ID_UTENTE_CV_DTO();
-        when(this.cvService.getCv(idsUtenteCvMock)).thenThrow(new RuntimeException("errore reperimento cv"));
+        Long id_cv = 1L;
+        when(this.cvService.getCv(id_cv)).thenThrow(new RuntimeException("errore reperimento cv"));
 
-        ResponseEntity<Cv_Msg_response> response = this.cvController.getCV(idsUtenteCvMock);
+        ResponseEntity<Cv_Msg_response> response = this.cvController.getCV(id_cv);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 
     }

@@ -97,17 +97,24 @@ public class CvService implements ICvService {
     }
 
     @Override
-    public BaseDTO getCv(ID_UTENTE_CV_DTO dati_id) {
-        Users utente = this.userService.returnUserIfExist(dati_id.getId_utente());
+    public BaseDTO getCv(Long id_cv) {
+//        Users utente = this.userService.returnUserIfExist(dati_id.getId_utente());
+//
+//        for (CVs cV : utente.getListaCv()) {
+//            if (cV.getId().equals(dati_id.getId_cv())) {
+//                return this.mapperCv.fromEntityToDTO(cV);
+//            }
+//        }
 
-        for (CVs cV : utente.getListaCv()) {
-            if (cV.getId().equals(dati_id.getId_cv())) {
-                return this.mapperCv.fromEntityToDTO(cV);
-            }
+        Optional<CVs> cvOpt = this.cvRepository.findById(id_cv);
+
+        if (cvOpt.isEmpty()) {
+            throw new RuntimeException("impossibile trovare il cv specificato");
+
         }
 
-        throw new RuntimeException("impossibile trovare il cv specificato");
-
+        CVs cv = cvOpt.get();
+        return this.mapperCv.fromEntityToDTO(cv);
     }
 
     @Override
@@ -158,7 +165,7 @@ public class CvService implements ICvService {
         List<BaseDTO> listaCv = new ArrayList<>();
 
         listaUtenti.stream()
-                .filter(user -> user.getNome().contains(nome))
+                .filter(user -> user.getNome().toLowerCase().contains(nome.toLowerCase()))
                 .forEach(users -> {
                     users.getListaCv().forEach(cVEntity -> {
                         listaCv.add(this.mapperCv.fromEntityToDTO(cVEntity));

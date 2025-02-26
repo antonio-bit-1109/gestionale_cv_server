@@ -56,6 +56,7 @@ public class MapperCv {
     // data l'entity cv ritorna una dto ad hoc per la get del singolo cv
     public BaseDTO fromEntityToDTO(CVs cv) {
         Cv_get_DTO cvDTO = new Cv_get_DTO();
+        cvDTO.setId_utente(cv.getUser().getId());
         cvDTO.setId_cv(cv.getId());
         cvDTO.setPath_file_System_pdf(cv.getNome_file_pdf());
         cvDTO.setCompetenze(cv.getCompetenze());
@@ -86,7 +87,7 @@ public class MapperCv {
 
         CVs cv = cVsOptional.get();
 
-        if (!(cv.getUser().getId().equals(datipdf.getIdUtente()))) {
+        if (!(cv.getUser().getId().equals(datipdf.getIdUtente()) || !cv.getUser().getCredenziali().getRole().equals("ADMIN"))) {
             throw new RuntimeException("L'utente che sta cercando di modificare il curriculum non è il possessore del curriculum");
         }
 

@@ -85,29 +85,17 @@ public class CvServiceTest {
     @Test
     void ritornaILCvSelezionatoDallUtente() {
 
-        ID_UTENTE_CV_DTO mock_id_user_cv = new ID_UTENTE_CV_DTO();
-        mock_id_user_cv.setId_utente(1L);
-        mock_id_user_cv.setId_cv(1L);
+//        ID_UTENTE_CV_DTO mock_id_user_cv = new ID_UTENTE_CV_DTO();
+//        mock_id_user_cv.setId_utente(1L);
+//        mock_id_user_cv.setId_cv(1L);
+        Long id_cv = 1L;
 
-        BaseDTO mockDto = new BaseDTO();
-        Users userMock = new Users();
-
-        List<CVs> listaCv = new ArrayList<>();
         CVs cv = new CVs();
-        CVs cv1 = new CVs();
+        BaseDTO mockDto = new BaseDTO();
 
-        cv.setId(1L);
-
-        listaCv.add(cv);
-        listaCv.add(cv1);
-
-        userMock.setListaCv(listaCv);
-
-
-        when(this.userService.returnUserIfExist(mock_id_user_cv.getId_utente())).thenReturn((userMock));
+        when(this.cvRepository.findById(id_cv)).thenReturn(Optional.of(cv));
         when(this.mapperCv.fromEntityToDTO(cv)).thenReturn(mockDto);
-
-        BaseDTO result = this.cvService.getCv(mock_id_user_cv);
+        BaseDTO result = this.cvService.getCv(id_cv);
         assertInstanceOf(BaseDTO.class, result);
     }
 
