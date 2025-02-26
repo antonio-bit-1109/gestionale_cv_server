@@ -48,7 +48,21 @@ public class GenerazionePDF {
     public void CancellaPDF_file_System(CVs cv) throws IOException {
         String RootPath = Paths.get("").toAbsolutePath().toString();
         // Path path = Paths.get(cv.getNome_file_pdf());
-        Files.delete(Path.of(RootPath + "/src/main/resources/static/" + cv.getNome_file_pdf()));
+//        Files.delete(Path.of(RootPath + "/src/main/resources/static/" + cv.getNome_file_pdf()));
+        try {
+            this.tentaCancellazione(RootPath, cv, "/src/main/resources/static/");
+
+        } catch (IOException e) {
+            try {
+                this.tentaCancellazione(RootPath, cv, "/src/main/resources/static/LoadedFromAdmin/");
+            } catch (IOException ex) {
+                throw new RuntimeException("impossibile trovare il percorso per cancellare il file: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void tentaCancellazione(String percorsoFile, CVs cv, String percorsoCartelle) throws IOException {
+        Files.delete(Path.of(percorsoFile + percorsoCartelle + cv.getNome_file_pdf()));
     }
 
     public void CreazionePDFFileSystem(Users utente, CVs cv, boolean alreadyCvPresent) throws IOException {

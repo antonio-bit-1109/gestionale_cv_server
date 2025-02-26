@@ -88,6 +88,7 @@ public class CvService implements ICvService {
 
         if (cv.getUser().getId().equals(ids_utente_cv.getId_utente())) {
             this.cvRepository.delete(cv);
+            
             return true;
         } else {
             throw new RuntimeException("l'utente che sta cercando di eliminare questo cv non è il proprietario del cv.");
@@ -195,7 +196,17 @@ public class CvService implements ICvService {
             File file = path.toFile();
 
             if (!file.exists()) {
-                throw new FileDoesntExist("il file non esiste", "download file");
+
+                try {
+                    Path path2 = Paths.get(filePath + "/src/main/resources/static/LoadedFromAdmin/" + cv.getNome_file_pdf());
+                    File file2 = path2.toFile();
+                    setFileName(cv.getNome_file_pdf());
+                    return new FileSystemResource(file2);
+                } catch (RuntimeException e) {
+                    throw new FileDoesntExist("il file non esiste neanche nel secondo path.", "download file");
+
+                }
+                // throw new FileDoesntExist("il file non esiste", "download file");
             }
 
             setFileName(cv.getNome_file_pdf());

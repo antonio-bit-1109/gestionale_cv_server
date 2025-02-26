@@ -126,7 +126,7 @@ public class MapperCv {
         Timestamp currentTimestamp = Timestamp.valueOf(currentTime);
         CVs cv = new CVs();
 
-        cv.setNome_file_pdf(percorsoFileSuServer + file.getOriginalFilename());
+        cv.setNome_file_pdf(file.getOriginalFilename());
         cv.setLingueConosciute(mappaParti.get("lingue_conosciute"));
         cv.setTitolo(mappaParti.get("titolo"));
         cv.setCreated_at(currentTimestamp);
