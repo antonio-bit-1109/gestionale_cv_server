@@ -88,7 +88,7 @@ public class CvService implements ICvService {
 
         if (cv.getUser().getId().equals(ids_utente_cv.getId_utente())) {
             this.cvRepository.delete(cv);
-            
+            this.generazionePDF.CancellaPDF_file_System(cv);
             return true;
         } else {
             throw new RuntimeException("l'utente che sta cercando di eliminare questo cv non è il proprietario del cv.");
