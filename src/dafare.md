@@ -8,4 +8,9 @@
 - [x] implementare autenticazione tramite ruoli
 - [x] implementare endpoint ricerca per esperienze
 - [x] scrivere documentazione dei test
-- [x] perche i dati in entrata nell edit utente mi ritornano messaggi di errore ?? 
+- [x] perche i dati in entrata nell edit utente mi ritornano messaggi di errore ??
+
+-[] se admin modifica pdf altro utente il download nel titolo risulta dell admin ??
+-[] crud utente soft delete
+-[] crud utente modifica dati utente
+-[] limite di creazione ad un solo admin 

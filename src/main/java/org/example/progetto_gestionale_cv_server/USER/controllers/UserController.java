@@ -34,6 +34,8 @@ public class UserController {
         this.userService = userservice;
     }
 
+
+    // registrazione utente, in fase di registrazione criptazione password utente -- Bcrypt
     @PostMapping("/registration")
     public ResponseEntity<StringResponse> registrazione(@Valid @RequestBody RegistrazioneUtenteDTO datiRegistrazione) {
         try {
@@ -50,6 +52,7 @@ public class UserController {
         }
     }
 
+    // login utente per ritorno al client del token generato.
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginDTO loginDTO) {
         try {
@@ -61,6 +64,8 @@ public class UserController {
         }
     }
 
+
+    // endpoint per caricamento foto utente su file system
     @PostMapping("/upload/photo")
     public ResponseEntity<StringResponse> caricamentoNuovaImgProfilo(
             @NotNull @RequestParam("file") MultipartFile file,

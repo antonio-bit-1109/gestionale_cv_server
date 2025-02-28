@@ -73,11 +73,50 @@ public class CvService implements ICvService {
 
 
     // metodo che dovrà modificare i campi cv della tabella e sostituire il pdf con i dati aggiornati.
+    // se è un admin a modificare il pdf, devi mantenere l'id dell utente originale a cui appartiene il pdf
+    // se l'utente che sta cercando di modificare il pdf è un admin,
+    // tramite idcv risalgo al proprietario del cv e uso l'utente originale
     @Override
     public boolean modificaPDF_Record_CV(DatiModifica_cv_DTO datiModificaPDF) throws IOException {
         Users user = this.userService.returnUserIfExist(datiModificaPDF.getIdUtente());
-        this.mapperCv.ModificaCv(datiModificaPDF, user);
+
+        // controllo se utente sia admin oppure no.
+        if (!this.isAdmin(user)) {
+            // se utente che sta modificando il cv non è un admin cancello il pdf originale
+            // e lo sostituisco con i dati in arrivo
+            // dalla dto
+            this.mapperCv.ModificaCv(datiModificaPDF, user);
+
+        } else {
+
+            // se chi sta modificando il cv invece è un admin, allora
+            // tramite id del cv risalgo al proprietario originale
+            // e passo l'utente originale come parametro user.
+
+            CVs cv = this.returnCvIfExist(datiModificaPDF.getIdCv());
+            long idUser = cv.getUser().getId();
+            Users utenteOriginale = this.userService.returnUserIfExist(idUser);
+            // inoltre passo un oggetto alternativo di tipo DatiModifica_cv_DTO
+            // con l'id utente al suo interno originale dell utente che realmente possiede quel cv.
+            // (invece che usare l'id utente nella dto che in questo caso apparterrebbe all'admin)
+            DatiModifica_cv_DTO dati = new DatiModifica_cv_DTO();
+            dati.setIdCv(cv.getId());
+            dati.setIdUtente(idUser);
+            dati.setCompetenze(datiModificaPDF.getCompetenze());
+            dati.setIstruzione(datiModificaPDF.getIstruzione());
+            dati.setTitolo(datiModificaPDF.getTitolo());
+            dati.setEsperienzePrecedenti(datiModificaPDF.getEsperienzePrecedenti());
+            dati.setDescrizioneGenerale(datiModificaPDF.getDescrizioneGenerale());
+            dati.setLingueConosciute(datiModificaPDF.getLingueConosciute());
+
+            this.mapperCv.ModificaCv(dati, utenteOriginale);
+        }
         return true;
+    }
+
+    // ritorna se l'utente è un admin oppure no.
+    private boolean isAdmin(Users user) {
+        return user.getCredenziali().getRole().equalsIgnoreCase("ADMIN");
     }
 
     @Transactional
@@ -98,13 +137,6 @@ public class CvService implements ICvService {
 
     @Override
     public BaseDTO getCv(Long id_cv) {
-//        Users utente = this.userService.returnUserIfExist(dati_id.getId_utente());
-//
-//        for (CVs cV : utente.getListaCv()) {
-//            if (cV.getId().equals(dati_id.getId_cv())) {
-//                return this.mapperCv.fromEntityToDTO(cV);
-//            }
-//        }
 
         Optional<CVs> cvOpt = this.cvRepository.findById(id_cv);
 

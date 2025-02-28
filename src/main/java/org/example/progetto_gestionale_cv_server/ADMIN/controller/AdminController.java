@@ -27,6 +27,8 @@ public class AdminController {
         this.adminService = adminService;
     }
 
+    // endpoint per il caricamento del file pdf
+    // riceve un form data con appesi dati interni al cv
     @PostMapping("/assignment")
     public ResponseEntity<StringResponse> caricaCvPdf(
             @NotNull @RequestParam("file") MultipartFile file,

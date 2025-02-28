@@ -52,9 +52,9 @@ public class Configurations {
                         .requestMatchers("/user/upload/photo").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/cv/create").hasRole("USER")
                         .requestMatchers("/cv/get-all/{id}").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/cv/findByCompetenza").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/cv/findByEsperienze").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/cv/findByNome").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/cv/findByCompetenza").hasRole("ADMIN")
+                        .requestMatchers("/cv/findByEsperienze").hasRole("ADMIN")
+                        .requestMatchers("/cv/findByNome").hasRole("ADMIN")
                         .requestMatchers("/cv/delete").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTAuthFilter(this.generateToken), UsernamePasswordAuthenticationFilter.class);

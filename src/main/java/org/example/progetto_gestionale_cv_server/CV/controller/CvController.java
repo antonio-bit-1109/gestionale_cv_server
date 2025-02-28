@@ -61,6 +61,7 @@ public class CvController {
 
     }
 
+    //cancellazione del cv -- hard delete
     @PostMapping("/delete")
     public ResponseEntity<StringResponse> cancellaCV(
             @Valid @RequestBody ID_UTENTE_CV_DTO ids_utente_cv) {
@@ -72,6 +73,7 @@ public class CvController {
         }
     }
 
+    // get singolo cv -- parametro fornito id cv
     @GetMapping("/get/{id_cv}")
     public ResponseEntity<Cv_Msg_response> getCV(@NotNull @PathVariable Long id_cv) {
         try {
@@ -96,6 +98,7 @@ public class CvController {
         }
     }
 
+    // find di tutti i cv che nel campo competenze hanno la stringa specificata
     @GetMapping("/findByCompetenza")
     public ResponseEntity<Get_All_cv_DTO> FindUsersByCompetenza(
             @RequestParam("competenza") String competenza
@@ -113,6 +116,7 @@ public class CvController {
         }
     }
 
+    // find di tutti i cv in base a nome utente specifico
     @GetMapping("/findByNome")
     public ResponseEntity<Get_All_cv_DTO> trovaCvTramiteNome(
             @RequestParam("nome") String nome
@@ -128,6 +132,7 @@ public class CvController {
         }
     }
 
+    // find di tutti i cv in base a valore del campo esperienza
     @GetMapping("/findByEsperienze")
     public ResponseEntity<Get_All_cv_DTO> trovaCvTramiteEsperienze(
             @RequestParam("esperienze") String esperienze
@@ -144,6 +149,7 @@ public class CvController {
     }
 
 
+    // download pdf da inviare al front end sotto forma di tipo resource
     @GetMapping("/downloadPDF")
     public ResponseEntity<Resource> downloadPdf(
             @RequestParam("id_cv") String id_cv) {
