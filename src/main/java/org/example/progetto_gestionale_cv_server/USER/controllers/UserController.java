@@ -138,5 +138,15 @@ public class UserController {
     }
 
 
+    @GetMapping("/get/profile/image/{id}")
+    public ResponseEntity<StringResponse> getURLProfileImage(@NotNull @PathVariable("id") Long id_utente) {
+        try {
+            String imageURL = this.userService.getProfileImage(id_utente);
+            return new ResponseEntity<>(new StringResponse(imageURL), HttpStatus.OK);
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>(new StringResponse("Errore durante la get dell'immagine profilo dell'utente: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
 //
 }

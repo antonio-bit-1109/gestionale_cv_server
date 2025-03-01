@@ -180,4 +180,10 @@ public class UserService implements IUserService {
         return utente.getIsActive();
 
     }
+
+    @Override
+    public String getProfileImage(Long id_utente) {
+        Users user = this.returnUserIfExist(id_utente);
+        return user.getProfileImage();
+    }
 }

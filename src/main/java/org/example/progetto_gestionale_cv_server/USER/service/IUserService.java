@@ -28,4 +28,6 @@ public interface IUserService {
     boolean editUtente(Edit_utente_DTO datiEdit, Long id_utente);
 
     boolean handleStatus(Long id_utente);
+
+    String getProfileImage(Long id_utente);
 }

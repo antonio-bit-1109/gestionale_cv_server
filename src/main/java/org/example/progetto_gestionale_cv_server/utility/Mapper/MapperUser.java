@@ -7,6 +7,7 @@ import org.example.progetto_gestionale_cv_server.USER.DTOs.req.RegistrazioneUten
 import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_Utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
+import org.example.progetto_gestionale_cv_server.utility.configuration.ConfigurationConnectionProp;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -18,25 +19,35 @@ public class MapperUser {
     private final BCryptPasswordEncoder passwordEncoder;
     private final CredenzialiRepository credenzialiRepository;
     private final UserRepository userRepository;
+    private final ConfigurationConnectionProp configurationConnectionProp;
 
     //costruttore privato
-    private MapperUser(BCryptPasswordEncoder passwordEncoder, CredenzialiRepository credenzialiRepository, UserRepository userRepository) {
+    private MapperUser(BCryptPasswordEncoder passwordEncoder,
+                       CredenzialiRepository credenzialiRepository,
+                       UserRepository userRepository,
+                       ConfigurationConnectionProp config_conn
+    ) {
         this.passwordEncoder = passwordEncoder;
         this.credenzialiRepository = credenzialiRepository;
         this.userRepository = userRepository;
+        this.configurationConnectionProp = config_conn;
     }
 
 
     public boolean FromDTOToEntity(RegistrazioneUtenteDTO dtoregistrazione, boolean creatingAdmin) {
 
-        String ImmagineDefault_profilo = Paths.get("").toAbsolutePath() + "/src/main/resources/static/images/default.jpg";
+        // String ImmagineDefault_profilo = Paths.get("").toAbsolutePath() + "/src/main/resources/static/images/default.jpg";
+        String port = this.configurationConnectionProp.getServerPort();
+        String address = this.configurationConnectionProp.getServerAddress();
 
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://").append(address).append(":").append(port).append("/images").append("/default.jpg");
 
         Users user = new Users();
         user.setNome(dtoregistrazione.getNome());
         user.setCognome(dtoregistrazione.getCognome());
         user.setTelefono(dtoregistrazione.getTelefono());
-        user.setProfileImage(ImmagineDefault_profilo);
+        user.setProfileImage(sb.toString());
         user.setConsensoTrattamentoDati(dtoregistrazione.getConsensoTrattamentoDati());
 
         Credenziali credenziali = new Credenziali();
