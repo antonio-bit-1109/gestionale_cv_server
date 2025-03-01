@@ -12,6 +12,7 @@ import org.example.progetto_gestionale_cv_server.USER.DTOs.resp.Get_Utente_DTO;
 import org.example.progetto_gestionale_cv_server.USER.entity.Users;
 import org.example.progetto_gestionale_cv_server.USER.repository.UserRepository;
 import org.example.progetto_gestionale_cv_server.utility.Mapper.MapperUser;
+import org.example.progetto_gestionale_cv_server.utility.configuration.ConfigurationConnectionProp;
 import org.example.progetto_gestionale_cv_server.utility.customExceptions.EmailAlreadyUsed;
 import org.example.progetto_gestionale_cv_server.utility.generateToken.GenerateToken;
 import org.springframework.stereotype.Service;
@@ -37,14 +38,16 @@ public class UserService implements IUserService {
     private final CredenzialiRepository credenzialiRepository;
     private final MapperUser mapperUser;
     private final GenerateToken generateToken;
-    private final PathMatcher pathMatcher;
+    private final ConfigurationConnectionProp configurationConnectionProp;
+    //  private final PathMatcher pathMatcher;
 
-    public UserService(UserRepository userRepo, MapperUser mapperuser, GenerateToken generateToken, CredenzialiRepository credenzialiRepository, PathMatcher pathMatcher) {
+    public UserService(ConfigurationConnectionProp connectionProp, UserRepository userRepo, MapperUser mapperuser, GenerateToken generateToken, CredenzialiRepository credenzialiRepository) {
         this.userRepository = userRepo;
         this.mapperUser = mapperuser;
         this.generateToken = generateToken;
         this.credenzialiRepository = credenzialiRepository;
-        this.pathMatcher = pathMatcher;
+        this.configurationConnectionProp = connectionProp;
+//        this.pathMatcher = pathMatcher;
     }
 
 
@@ -74,9 +77,22 @@ public class UserService implements IUserService {
         Path destinazioneSalvataggioFoto = Paths.get("").toAbsolutePath().resolve("src/main/resources/static/images");
 
         try {
-            Path filePath = destinazioneSalvataggioFoto.resolve(Objects.requireNonNull(fileImg.getOriginalFilename()));
+
+            String address = this.configurationConnectionProp.getServerAddress();
+            String port = this.configurationConnectionProp.getServerPort();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("http://")
+                    .append(address)
+                    .append(":")
+                    .append(port)
+                    .append("/images")
+                    .append("/")
+                    .append(Objects.requireNonNull(fileImg.getOriginalFilename()).replace(" ", "_"));
+
+            Path filePath = destinazioneSalvataggioFoto.resolve(Objects.requireNonNull(fileImg.getOriginalFilename().replace(" ", "_")));
             Files.copy(fileImg.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            utente.setProfileImage(filePath.toString());
+            utente.setProfileImage(sb.toString());
             this.userRepository.save(utente);
             return true;
         } catch (IOException ex) {
