@@ -65,8 +65,6 @@ public class imageController {
 
     private String getFileExtension(String fileName) {
         int lastpoint = fileName.lastIndexOf(".");
-        String ext = fileName.substring(lastpoint + 1);
-        System.out.println(ext);
-        return ext;
+        return fileName.substring(lastpoint + 1);
     }
 }
