@@ -41,7 +41,7 @@ public class MapperUser {
         String address = this.configurationConnectionProp.getServerAddress();
 
         StringBuilder sb = new StringBuilder();
-        sb.append("http://").append(address).append(":").append(port).append("/images").append("/default.jpg");
+        sb.append("http://").append(address).append(":").append(port).append("/images").append("/get").append("/default.jpg");
 
         Users user = new Users();
         user.setNome(dtoregistrazione.getNome());

@@ -87,6 +87,7 @@ public class UserService implements IUserService {
                     .append(":")
                     .append(port)
                     .append("/images")
+                    .append("/get")
                     .append("/")
                     .append(Objects.requireNonNull(fileImg.getOriginalFilename()).replace(" ", "_"));
 
